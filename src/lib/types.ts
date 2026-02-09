@@ -28,4 +28,5 @@ export type Poll = {
   timeframe?: 'week' | 'month' | 'year'; // For predictions
   correctOptionId?: string; // For quizzes/challenges
   difficulty?: 'easy' | 'medium' | 'hard'; // For islamic questions, etc.
+  beatPercentage?: number; // For quizzes, percentage of users the player beat
 };

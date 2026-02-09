@@ -63,22 +63,14 @@ export const MOCK_DATA: Poll[] = [
     question: 'ما هو ناتج 15 * (4 + 6) / 2 ؟',
     endsAt: addHours(new Date(), 8).toISOString(),
     correctOptionId: '2-3',
+    beatPercentage: 82,
     options: [
       { id: '2-1', text: '150', votes: 890 },
       { id: '2-2', text: '50', votes: 345 },
       { id: '2-3', text: '75', votes: 1560 },
       { id: '2-4', text: '100', votes: 410 },
     ],
-    comments: [
-       {
-        id: 'c2-1',
-        author: { name: 'خبير رياضيات', avatarUrl: 'https://picsum.photos/seed/104/40/40' },
-        text: 'تذكر ترتيب العمليات الحسابية! الأقواس أولاً.',
-        upvotes: 55,
-        downvotes: 10,
-        timestamp: subDays(new Date(), 1).toISOString(),
-      },
-    ],
+    comments: [],
   },
   // User-generated Prediction
   {
@@ -111,21 +103,13 @@ export const MOCK_DATA: Poll[] = [
     question: 'ما هو الشهر الذي أنزل فيه القرآن الكريم؟',
     difficulty: 'easy',
     correctOptionId: '6-1',
+    beatPercentage: 95,
     options: [
       { id: '6-1', text: 'شهر رمضان', votes: 1800 },
       { id: '6-2', text: 'شهر شوال', votes: 50 },
       { id: '6-3', text: 'شهر ذو الحجة', votes: 25 },
     ],
-    comments: [
-       {
-        id: 'c6-1',
-        author: { name: 'طالب علم', avatarUrl: 'https://picsum.photos/seed/109/40/40' },
-        text: 'قال تعالى: "شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ".',
-        upvotes: 98,
-        downvotes: 0,
-        timestamp: subDays(new Date(), 1).toISOString(),
-      },
-    ],
+    comments: [],
   },
   // Admin-generated Islamic Question (Quiz) - Medium
   {
@@ -135,6 +119,7 @@ export const MOCK_DATA: Poll[] = [
     question: 'من هو الصحابي الذي اهتز لموته عرش الرحمن؟',
     difficulty: 'medium',
     correctOptionId: '7-2',
+    beatPercentage: 68,
     options: [
       { id: '7-1', text: 'عمر بن الخطاب', votes: 450 },
       { id: '7-2', text: 'سعد بن معاذ', votes: 1250 },
@@ -150,6 +135,7 @@ export const MOCK_DATA: Poll[] = [
     question: 'ما هي السورة التي وردت فيها سجدتان؟',
     difficulty: 'hard',
     correctOptionId: '8-3',
+    beatPercentage: 45,
     options: [
       { id: '8-1', text: 'سورة السجدة', votes: 900 },
       { id: '8-2', text: 'سورة فصلت', votes: 420 },

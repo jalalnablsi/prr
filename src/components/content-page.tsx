@@ -8,9 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { CommentSection } from './comment-section';
 import { useToast } from '@/hooks/use-toast';
-import { CountdownTimer } from './countdown-timer';
+import { QuestionTimer } from './question-timer';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy } from 'lucide-react';
 
 export function ContentPage({ item }: { item: Poll }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -23,15 +23,29 @@ export function ContentPage({ item }: { item: Poll }) {
   }, [options, isAnswered]);
 
   const isQuiz = item.correctOptionId != null;
+
+  const handleTimeUp = () => {
+    if (!isAnswered) {
+      setIsAnswered(true);
+      toast({
+        variant: "destructive",
+        title: "انتهى الوقت!",
+        description: "لم تختر إجابة في الوقت المحدد.",
+      });
+    }
+  };
   
   const handleVote = () => {
-    if (selectedOption) {
+    if (selectedOption || isQuiz) { // Allow submitting without an answer for quizzes (time up)
       setIsAnswered(true);
-      setOptions(currentOptions =>
-        currentOptions.map(opt =>
-          opt.id === selectedOption ? { ...opt, votes: opt.votes + 1 } : opt
-        )
-      );
+
+      if (selectedOption) {
+        setOptions(currentOptions =>
+          currentOptions.map(opt =>
+            opt.id === selectedOption ? { ...opt, votes: opt.votes + 1 } : opt
+          )
+        );
+      }
       
       const isCorrect = selectedOption === item.correctOptionId;
 
@@ -41,7 +55,7 @@ export function ContentPage({ item }: { item: Poll }) {
             title: "إجابة صحيحة!",
             description: "أحسنت! لقد اخترت الإجابة الصحيحة.",
           });
-        } else {
+        } else if (selectedOption) { // Only show wrong answer toast if an option was actually selected
           toast({
             variant: "destructive",
             title: "إجابة خاطئة",
@@ -67,6 +81,7 @@ export function ContentPage({ item }: { item: Poll }) {
           return isQuiz ? "اختر الإجابة التي تعتقد أنها صحيحة." : "اختر خيارًا وأدلي بصوتك.";
       }
       if (isQuiz) {
+          if (selectedOption === null) return "انتهى الوقت! هذه هي النتائج.";
           return selectedOption === item.correctOptionId ? "أحسنت! هذه هي النتائج حتى الآن." : "إجابة خاطئة. هذه هي النتائج حتى الآن.";
       }
       return "شكرًا لتصويتك! إليك النتائج حتى الآن.";
@@ -78,7 +93,9 @@ export function ContentPage({ item }: { item: Poll }) {
         <CardHeader>
           <div className="flex justify-between items-start mb-2">
             <CardTitle className="text-3xl font-headline font-bold">{item.question}</CardTitle>
-            {item.type === 'challenge' && item.endsAt && <CountdownTimer endsAt={item.endsAt} />}
+            {isQuiz && !isAnswered && (
+              <QuestionTimer duration={15} onTimeUp={handleTimeUp} isPaused={isAnswered} />
+            )}
           </div>
           <CardDescription className="text-lg text-muted-foreground">
             {getResultDescription()}
@@ -182,10 +199,21 @@ export function ContentPage({ item }: { item: Poll }) {
                 لقد صوتت مع {(((options.find(o => o.id === selectedOption)!.votes) / totalVotes) * 100).toFixed(0)}% من المشاركين.
             </div>
           )}
+           {isAnswered && isQuiz && selectedOption === item.correctOptionId && item.beatPercentage != null && (
+            <Card className="mt-6 bg-primary/10 border-primary/30">
+              <CardHeader className="text-center items-center">
+                <Trophy className="h-10 w-10 text-primary mb-2" />
+                <CardTitle>أداء رائع!</CardTitle>
+                <CardDescription className="text-base">
+                  لقد تفوقت على {item.beatPercentage}% من المشاركين.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          )}
         </CardContent>
       </Card>
 
-      <CommentSection comments={item.comments} contentId={item.id} contentType={item.type} />
+      {!isQuiz && <CommentSection comments={item.comments} contentId={item.id} contentType={item.type} />}
     </div>
   );
 }

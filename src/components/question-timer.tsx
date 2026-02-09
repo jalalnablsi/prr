@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import { arSA } from 'date-fns/locale';
 import { Badge } from './ui/badge';
 import { Timer } from 'lucide-react';
 
