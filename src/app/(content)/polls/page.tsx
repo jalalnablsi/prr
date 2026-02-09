@@ -6,8 +6,8 @@ export default function PollsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-headline font-bold mb-2">Community Polls</h1>
-      <p className="text-muted-foreground mb-8">See what the community thinks. Cast your vote!</p>
+      <h1 className="text-3xl font-headline font-bold mb-2">استطلاعات المجتمع</h1>
+      <p className="text-muted-foreground mb-8">شاهد رأي المجتمع. شارك بصوتك!</p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {polls.map(poll => (
           <PollCard key={poll.id} item={poll} />

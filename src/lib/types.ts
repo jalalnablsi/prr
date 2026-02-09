@@ -14,11 +14,13 @@ export type PollOption = {
   id: string;
   text: string;
   votes: number;
+  imageUrl?: string;
 };
 
 export type Poll = {
   id: string;
   type: 'poll' | 'challenge' | 'prediction';
+  category: 'sports' | 'games' | 'math' | 'puzzles' | 'islamic' | 'tech' | 'general';
   question: string;
   options: PollOption[];
   comments: Comment[];

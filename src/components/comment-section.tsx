@@ -4,13 +4,14 @@ import { useState, useEffect, useMemo, useTransition } from 'react';
 import type { Comment as CommentType, Poll } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { ArrowBigDown, ArrowBigUp, Award, MessageSquare, Pin } from 'lucide-react';
+import { ArrowBigDown, ArrowBigUp, Award, MessageSquare } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getTopComment } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
+import { Badge } from './ui/badge';
 
 export function CommentSection({ comments: initialComments, contentId, contentType }: { comments: CommentType[], contentId: string, contentType: Poll['type'] }) {
   const [comments, setComments] = useState(initialComments);
@@ -51,7 +52,7 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
     if (newComment.trim()) {
       const comment: CommentType = {
         id: `c-new-${Date.now()}`,
-        author: { name: 'You', avatarUrl: 'https://picsum.photos/seed/200/40/40' },
+        author: { name: 'أنت', avatarUrl: 'https://picsum.photos/seed/200/40/40' },
         text: newComment,
         upvotes: 0,
         downvotes: 0,
@@ -60,8 +61,8 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
       setComments(prev => [comment, ...prev]);
       setNewComment('');
       toast({
-        title: "Comment posted!",
-        description: "Your voice has been heard.",
+        title: "تم نشر التعليق!",
+        description: "تمت إضافة صوتك إلى النقاش.",
       });
     }
   };
@@ -71,13 +72,13 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
       <CardHeader>
         <CardTitle className="flex items-center gap-2 font-headline">
           <MessageSquare />
-          Comments ({comments.length})
+          التعليقات ({comments.length})
         </CardTitle>
         <div className="flex justify-between items-center pt-4">
           <Tabs value={sortBy} onValueChange={(value) => setSortBy(value as 'top' | 'newest')}>
             <TabsList>
-              <TabsTrigger value="top">Top</TabsTrigger>
-              <TabsTrigger value="newest">Newest</TabsTrigger>
+              <TabsTrigger value="top">الأفضل</TabsTrigger>
+              <TabsTrigger value="newest">الأحدث</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -87,16 +88,16 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
           <div className="flex gap-4">
             <Avatar>
               <AvatarImage src="https://picsum.photos/seed/200/40/40" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarFallback>أ</AvatarFallback>
             </Avatar>
             <div className="w-full space-y-2">
               <Textarea
-                placeholder="Add a comment..."
+                placeholder="أضف تعليقاً..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 className="bg-input"
               />
-              <Button onClick={handlePostComment} size="sm" disabled={!newComment.trim()}>Post Comment</Button>
+              <Button onClick={handlePostComment} size="sm" disabled={!newComment.trim()}>نشر التعليق</Button>
             </div>
           </div>
           <div className="space-y-6 pt-6">
@@ -120,12 +121,12 @@ function Comment({ comment, isPinned, isPinning }: { comment: CommentType, isPin
         <AvatarFallback>{comment.author.name.charAt(0)}</AvatarFallback>
       </Avatar>
       <div className="w-full">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
           <p className="font-semibold text-sm">{comment.author.name}</p>
           <p className="text-xs text-muted-foreground">{new Date(comment.timestamp).toLocaleDateString()}</p>
           {isPinned && (
             <Badge variant="secondary" className="bg-accent/20 border-accent/30 text-accent">
-                <Award className="h-3 w-3 mr-1" /> Pinned by AI
+                <Award className="h-3 w-3 ms-1" /> مثبت بالذكاء الاصطناعي
             </Badge>
           )}
           {isPinning && !isPinned && <Skeleton className="w-24 h-5" />}

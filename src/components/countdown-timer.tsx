@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { arSA } from 'date-fns/locale';
 import { Badge } from './ui/badge';
 
 export function CountdownTimer({ endsAt }: { endsAt: string }) {
@@ -10,18 +11,18 @@ export function CountdownTimer({ endsAt }: { endsAt: string }) {
   useEffect(() => {
     const endDate = new Date(endsAt);
 
-    if (endDate <= new Date()) {
-      setTimeLeft('Challenge ended');
-      return;
-    }
-
     const calculateTimeLeft = () => {
-      const distance = formatDistanceToNow(endDate, { addSuffix: true });
-      setTimeLeft(`Ends ${distance}`);
+      if (endDate <= new Date()) {
+        setTimeLeft('انتهى التحدي');
+        if(interval) clearInterval(interval);
+        return;
+      }
+      const distance = formatDistanceToNow(endDate, { addSuffix: true, locale: arSA });
+      setTimeLeft(`ينتهي ${distance}`);
     };
-
+    
     calculateTimeLeft();
-    const interval = setInterval(calculateTimeLeft, 1000 * 60); // Update every minute
+    const interval = setInterval(calculateTimeLeft, 1000 * 30); // Update every 30 seconds
 
     return () => clearInterval(interval);
   }, [endsAt]);

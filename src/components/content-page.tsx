@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 import type { Poll, PollOption } from '@/lib/types';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { CommentSection } from './comment-section';
 import { useToast } from '@/hooks/use-toast';
 import { CountdownTimer } from './countdown-timer';
+import { cn } from '@/lib/utils';
 
 export function ContentPage({ item }: { item: Poll }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -29,36 +31,45 @@ export function ContentPage({ item }: { item: Poll }) {
       );
       const chosenOptionText = options.find(o => o.id === selectedOption)?.text;
       toast({
-        title: "Vote cast!",
-        description: `You voted for "${chosenOptionText}".`,
+        title: "تم التصويت!",
+        description: `لقد صوتت لصالح "${chosenOptionText}".`,
       });
     }
   };
 
   const isChallengeEnded = item.type === 'challenge' && item.endsAt && new Date(item.endsAt) <= new Date();
   const canVote = !hasVoted && !isChallengeEnded;
+  const hasImages = options.some(opt => opt.imageUrl);
 
   return (
     <div className="max-w-4xl mx-auto">
       <Card className="overflow-hidden">
         <CardHeader>
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-start mb-2">
             <CardTitle className="text-3xl font-headline font-bold">{item.question}</CardTitle>
             {item.type === 'challenge' && item.endsAt && <CountdownTimer endsAt={item.endsAt} />}
           </div>
           <CardDescription className="text-lg text-muted-foreground">
-            {hasVoted ? "Here are the results so far." : "Select an option and cast your vote."}
+            {hasVoted ? "إليك النتائج حتى الآن." : "اختر خيارًا وأدلي بصوتك."}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className={cn(
+            "grid gap-4",
+            hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-4"
+          )}>
             {options.map((option) => {
               const percentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
               const isSelected = option.id === selectedOption;
 
-              return (
-                <div key={option.id}>
-                  {hasVoted ? (
+              if (hasVoted) {
+                return (
+                  <div key={option.id} className={cn("p-4 rounded-lg border-2", isSelected ? "border-primary bg-primary/10" : "border-transparent bg-card/50")}>
+                    {option.imageUrl && (
+                      <div className="relative w-full aspect-video mb-4 rounded-md overflow-hidden">
+                        <Image src={option.imageUrl} alt={option.text} fill className="object-cover" />
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm">
                         <p className={`font-medium ${isSelected ? 'text-primary' : ''}`}>{option.text}</p>
@@ -66,15 +77,41 @@ export function ContentPage({ item }: { item: Poll }) {
                       </div>
                       <Progress value={percentage} className={isSelected ? '[&>div]:bg-primary' : ''} />
                     </div>
-                  ) : (
-                    <Button
-                      variant={isSelected ? 'default' : 'secondary'}
-                      className="w-full justify-start h-auto py-3 px-4 text-left"
-                      onClick={() => setSelectedOption(option.id)}
-                    >
-                      {option.text}
-                    </Button>
-                  )}
+                  </div>
+                )
+              }
+              
+              if(hasImages) {
+                 return (
+                  <div 
+                    key={option.id} 
+                    onClick={() => canVote && setSelectedOption(option.id)}
+                    className={cn(
+                      "rounded-lg border-2 bg-card/50 overflow-hidden cursor-pointer transition-all",
+                      isSelected ? "border-primary shadow-lg" : "border-border hover:border-primary/50",
+                      !canVote && "cursor-not-allowed opacity-70"
+                    )}
+                  >
+                     {option.imageUrl && (
+                      <div className="relative w-full aspect-video">
+                        <Image src={option.imageUrl} alt={option.text} fill className="object-cover" />
+                      </div>
+                    )}
+                    <p className="p-4 font-medium text-center">{option.text}</p>
+                  </div>
+                 )
+              }
+
+              return (
+                <div key={option.id}>
+                  <Button
+                    variant={isSelected ? 'default' : 'secondary'}
+                    className="w-full justify-start h-auto py-3 px-4 text-left"
+                    onClick={() => canVote && setSelectedOption(option.id)}
+                    disabled={!canVote}
+                  >
+                    {option.text}
+                  </Button>
                 </div>
               );
             })}
@@ -82,13 +119,13 @@ export function ContentPage({ item }: { item: Poll }) {
           {!hasVoted && (
             <div className="mt-6 text-center">
               <Button size="lg" onClick={handleVote} disabled={!selectedOption || !canVote}>
-                {isChallengeEnded ? 'Challenge Ended' : 'Cast My Vote'}
+                {isChallengeEnded ? 'انتهى التحدي' : 'أدلي بصوتي'}
               </Button>
             </div>
           )}
           {hasVoted && selectedOption && (
             <div className="mt-6 text-center text-sm text-accent p-3 bg-accent/10 rounded-lg">
-                You voted with {((options.find(o => o.id === selectedOption)!.votes / totalVotes) * 100).toFixed(0)}% of participants.
+                لقد صوتت مع {((options.find(o => o.id === selectedOption)!.votes / totalVotes) * 100).toFixed(0)}% من المشاركين.
             </div>
           )}
         </CardContent>

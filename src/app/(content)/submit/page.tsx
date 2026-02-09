@@ -8,16 +8,21 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { PlusCircle, X } from 'lucide-react';
+import { Image as ImageIcon, PlusCircle, X } from 'lucide-react';
+
+type Option = {
+  text: string;
+  imageUrl: string;
+}
 
 export default function SubmitPage() {
   const { toast } = useToast();
   const [contentType, setContentType] = useState('poll');
-  const [options, setOptions] = useState(['', '']);
+  const [options, setOptions] = useState<Option[]>([{ text: '', imageUrl: '' }, { text: '', imageUrl: '' }]);
 
   const handleAddOption = () => {
     if (options.length < 5) {
-      setOptions([...options, '']);
+      setOptions([...options, { text: '', imageUrl: '' }]);
     }
   };
   
@@ -29,9 +34,9 @@ export default function SubmitPage() {
     }
   };
 
-  const handleOptionChange = (index: number, value: string) => {
+  const handleOptionChange = (index: number, field: keyof Option, value: string) => {
     const newOptions = [...options];
-    newOptions[index] = value;
+    newOptions[index][field] = value;
     setOptions(newOptions);
   };
 
@@ -39,8 +44,8 @@ export default function SubmitPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
-      title: "Content Submitted!",
-      description: "Your post is now under review. Thank you for contributing!",
+      title: "تم إرسال المحتوى!",
+      description: "مشاركتك الآن قيد المراجعة. شكرا لمساهمتك!",
     });
     // Here you would typically send the data to your backend API
   };
@@ -50,38 +55,69 @@ export default function SubmitPage() {
       <form onSubmit={handleSubmit}>
         <Card>
           <CardHeader>
-            <CardTitle className="font-headline text-2xl">Create a New Post</CardTitle>
-            <CardDescription>Share a poll, challenge, or prediction with the community.</CardDescription>
+            <CardTitle className="font-headline text-2xl">إنشاء مشاركة جديدة</CardTitle>
+            <CardDescription>شارك استطلاعًا أو تحديًا أو توقعًا مع المجتمع.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="type">Content Type</Label>
-              <Select onValueChange={setContentType} defaultValue="poll">
-                <SelectTrigger id="type">
-                  <SelectValue placeholder="Select a content type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="poll">Community Poll</SelectItem>
-                  <SelectItem value="challenge">Daily Challenge</SelectItem>
-                  <SelectItem value="prediction">Prediction</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="type">نوع المحتوى</Label>
+                <Select onValueChange={setContentType} defaultValue="poll">
+                  <SelectTrigger id="type">
+                    <SelectValue placeholder="اختر نوع المحتوى" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="poll">استطلاع مجتمعي</SelectItem>
+                    <SelectItem value="challenge">تحدي يومي</SelectItem>
+                    <SelectItem value="prediction">توقع</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="category">الفئة</Label>
+                <Select defaultValue="general">
+                  <SelectTrigger id="category">
+                    <SelectValue placeholder="اختر فئة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="general">عام</SelectItem>
+                    <SelectItem value="sports">رياضة</SelectItem>
+                    <SelectItem value="games">ألعاب</SelectItem>
+                    <SelectItem value="math">رياضيات</SelectItem>
+                    <SelectItem value="puzzles">ألغاز</SelectItem>
+                    <SelectItem value="islamic">أسئلة إسلامية</SelectItem>
+                    <SelectItem value="tech">تقنية</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="question">Question</Label>
-              <Textarea id="question" placeholder="e.g., What's the best JS framework?" required />
+              <Label htmlFor="question">السؤال</Label>
+              <Textarea id="question" placeholder="مثال: ما هي أفضل لغة برمجة لتطوير الواجهات الأمامية؟" required />
             </div>
             <div className="space-y-4">
-              <Label>Options</Label>
+              <Label>الخيارات</Label>
               {options.map((option, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <Input 
-                    type="text" 
-                    placeholder={`Option ${index + 1}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    required 
-                  />
+                  <div className='w-full space-y-2'>
+                     <Input 
+                        type="text" 
+                        placeholder={`الخيار ${index + 1}`}
+                        value={option.text}
+                        onChange={(e) => handleOptionChange(index, 'text', e.target.value)}
+                        required 
+                      />
+                      <div className="relative">
+                         <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                         <Input 
+                            type="text" 
+                            placeholder="رابط الصورة (اختياري)"
+                            value={option.imageUrl}
+                            onChange={(e) => handleOptionChange(index, 'imageUrl', e.target.value)}
+                            className="pl-10"
+                          />
+                      </div>
+                  </div>
                   {options.length > 2 && (
                     <Button variant="ghost" size="icon" onClick={() => handleRemoveOption(index)}>
                       <X className="h-4 w-4" />
@@ -91,30 +127,30 @@ export default function SubmitPage() {
               ))}
               {options.length < 5 && (
                 <Button type="button" variant="outline" size="sm" onClick={handleAddOption}>
-                  <PlusCircle className="mr-2 h-4 w-4" />
-                  Add Option
+                  <PlusCircle className="ms-2 h-4 w-4" />
+                  إضافة خيار
                 </Button>
               )}
             </div>
 
             {contentType === 'prediction' && (
               <div className="space-y-2">
-                <Label htmlFor="timeframe">Prediction Timeframe</Label>
+                <Label htmlFor="timeframe">الإطار الزمني للتوقع</Label>
                 <Select>
                   <SelectTrigger id="timeframe">
-                    <SelectValue placeholder="Select a timeframe" />
+                    <SelectValue placeholder="اختر إطارًا زمنيًا" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="week">1 Week</SelectItem>
-                    <SelectItem value="month">1 Month</SelectItem>
-                    <SelectItem value="year">1 Year</SelectItem>
+                    <SelectItem value="week">أسبوع واحد</SelectItem>
+                    <SelectItem value="month">شهر واحد</SelectItem>
+                    <SelectItem value="year">سنة واحدة</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             )}
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full" size="lg">Submit for Review</Button>
+            <Button type="submit" className="w-full" size="lg">إرسال للمراجعة</Button>
           </CardFooter>
         </Card>
       </form>

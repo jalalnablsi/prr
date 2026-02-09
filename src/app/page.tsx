@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Lightbulb, Vote } from "lucide-react";
+import { Flame, Lightbulb, Vote, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -12,35 +12,41 @@ export default function Home() {
             <Icons.logo className="h-16 w-16" />
           </div>
           <h1 className="font-headline text-4xl md:text-6xl font-bold tracking-tighter mb-4 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
-            DopamineLab
+            مختبر الدوبامين
           </h1>
           <p className="max-w-2xl mx-auto text-muted-foreground md:text-xl mb-8">
-            The ultimate hub for challenges, polls, and predictions. Engage, vote, and see where you stand.
+            المركز النهائي للتحديات واستطلاعات الرأي والتوقعات. تفاعل، صوّت، واعرف مكانتك.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <FeatureCard
               href="/polls"
               icon={<Vote className="h-8 w-8 text-primary" />}
-              title="Community Polls"
-              description="Vote on trending topics and see what the community thinks."
+              title="استطلاعات المجتمع"
+              description="صوّت على المواضيع الشائعة وشاهد رأي المجتمع."
             />
             <FeatureCard
               href="/challenges"
               icon={<Flame className="h-8 w-8 text-primary" />}
-              title="Daily Challenges"
-              description="Test your knowledge and instincts with new challenges every day."
+              title="التحديات اليومية"
+              description="اختبر معلوماتك وحدسك مع تحديات جديدة كل يوم."
             />
             <FeatureCard
               href="/predictions"
               icon={<Lightbulb className="h-8 w-8 text-primary" />}
-              title="Make Predictions"
-              description="Predict future events and see if the community agrees with you."
+              title="أنشئ توقعات"
+              description="توقع أحداثًا مستقبلية وشاهد ما إذا كان المجتمع يوافقك الرأي."
+            />
+             <FeatureCard
+              href="/islamic"
+              icon={<BookOpen className="h-8 w-8 text-primary" />}
+              title="أسئلة إسلامية"
+              description="اختبر و زد من معرفتك في العلوم الإسلامية."
             />
           </div>
         </section>
       </main>
       <footer className="text-center p-6 text-muted-foreground text-sm">
-        Built for the future of social engagement.
+        صُنع من أجل مستقبل المشاركة الاجتماعية.
       </footer>
     </div>
   );
