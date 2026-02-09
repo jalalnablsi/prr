@@ -34,6 +34,7 @@ export type Poll = {
 export type LeaderboardUser = {
   rank: number;
   name: string;
+  title?: string;
   avatarUrl: string;
   score: number;
 };

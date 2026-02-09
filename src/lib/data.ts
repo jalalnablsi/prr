@@ -2,14 +2,14 @@ import type { Poll, LeaderboardUser } from '@/lib/types';
 import { subDays } from 'date-fns';
 
 export const MOCK_LEADERBOARD_USERS: LeaderboardUser[] = [
-  { rank: 1, name: 'سلطان المعرفة', avatarUrl: 'https://picsum.photos/seed/leader1/80/80', score: 154320 },
-  { rank: 2, name: 'أميرة الألغاز', avatarUrl: 'https://picsum.photos/seed/leader2/80/80', score: 149870 },
-  { rank: 3, name: 'فارس التحدي', avatarUrl: 'https://picsum.photos/seed/leader3/80/80', score: 145110 },
-  { rank: 4, name: 'نور', avatarUrl: 'https://picsum.photos/seed/leader4/80/80', score: 130500 },
-  { rank: 5, name: 'خالد', avatarUrl: 'https://picsum.photos/seed/leader5/80/80', score: 125600 },
-  { rank: 6, name: 'فاطمة', avatarUrl: 'https://picsum.photos/seed/leader6/80/80', score: 110230 },
-  { rank: 7, name: 'عبدالله', avatarUrl: 'https://picsum.photos/seed/leader7/80/80', score: 98700 },
-  { rank: 8, name: 'ريم', avatarUrl: 'https://picsum.photos/seed/leader8/80/80', score: 95400 },
+  { rank: 1, title: 'سلطان المعرفة', name: 'أحمد عبدالله', avatarUrl: 'https://picsum.photos/seed/leader1/80/80', score: 154320 },
+  { rank: 2, title: 'أميرة الألغاز', name: 'فاطمة علي', avatarUrl: 'https://picsum.photos/seed/leader2/80/80', score: 149870 },
+  { rank: 3, title: 'فارس التحدي', name: 'يوسف محمد', avatarUrl: 'https://picsum.photos/seed/leader3/80/80', score: 145110 },
+  { rank: 4, name: 'نور خالد', avatarUrl: 'https://picsum.photos/seed/leader4/80/80', score: 130500 },
+  { rank: 5, name: 'خالد وليد', avatarUrl: 'https://picsum.photos/seed/leader5/80/80', score: 125600 },
+  { rank: 6, name: 'فاطمة إبراهيم', avatarUrl: 'https://picsum.photos/seed/leader6/80/80', score: 110230 },
+  { rank: 7, name: 'عبدالله حسن', avatarUrl: 'https://picsum.photos/seed/leader7/80/80', score: 98700 },
+  { rank: 8, name: 'ريم مصطفى', avatarUrl: 'https://picsum.photos/seed/leader8/80/80', score: 95400 },
 ];
 
 export const MOCK_DATA: Poll[] = [

@@ -30,8 +30,15 @@ function LeaderboardCard({ user }: { user: LeaderboardUser }) {
                     <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
-                    <p className="font-bold text-lg">{user.name}</p>
-                    <p className="text-sm text-muted-foreground">{user.score.toLocaleString()} نقطة</p>
+                    {user.title ? (
+                        <>
+                            <p className="font-bold text-lg">{user.title}</p>
+                            <p className="text-md text-foreground/80">{user.name}</p>
+                        </>
+                    ) : (
+                        <p className="font-bold text-lg">{user.name}</p>
+                    )}
+                    <p className="text-sm text-muted-foreground mt-1">{user.score.toLocaleString()} نقطة</p>
                 </div>
             </CardContent>
         </Card>
