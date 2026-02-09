@@ -25,19 +25,19 @@ export function Header() {
               href="/challenges"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
-              تحديات
+              التحدي اليومي
+            </Link>
+             <Link
+              href="/quizzes"
+              className="transition-colors hover:text-foreground/80 text-foreground/60"
+            >
+              اختبارات
             </Link>
             <Link
               href="/predictions"
               className="transition-colors hover:text-foreground/80 text-foreground/60"
             >
               توقعات
-            </Link>
-             <Link
-              href="/islamic"
-              className="transition-colors hover:text-foreground/80 text-foreground/60"
-            >
-              أسئلة إسلامية
             </Link>
           </nav>
         </div>

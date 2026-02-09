@@ -1,8 +1,8 @@
 import type { Poll } from '@/lib/types';
-import { subDays, addHours } from 'date-fns';
+import { subDays } from 'date-fns';
 
 export const MOCK_DATA: Poll[] = [
-  // User-generated Poll
+  // --- Polls ---
   {
     id: '1',
     type: 'poll',
@@ -33,7 +33,6 @@ export const MOCK_DATA: Poll[] = [
       },
     ],
   },
-   // User-generated Poll with Images
   {
     id: '5',
     type: 'poll',
@@ -81,7 +80,32 @@ export const MOCK_DATA: Poll[] = [
     ],
     comments: [],
   },
-  // --- Start Daily Challenge Questions ---
+
+  // --- Predictions ---
+  {
+    id: '3',
+    type: 'prediction',
+    category: 'tech',
+    question: 'هل سيحل الذكاء الاصطناعي محل مطوري البرمجيات في السنوات العشر القادمة؟',
+    timeframe: 'year',
+    options: [
+      { id: '3-1', text: 'نعم، بالكامل.', votes: 320 },
+      { id: '3-2', text: 'سيكون أداة قوية، وليس بديلاً.', votes: 2400 },
+      { id: '3-3', text: 'لا، الإبداع البشري لا يمكن تعويضه.', votes: 980 },
+    ],
+    comments: [
+        {
+        id: 'c3-1',
+        author: { name: 'مطور علاقات', avatarUrl: 'https://picsum.photos/seed/105/40/40' },
+        text: "الأمر كله يتعلق بالتعزيز، وليس الاستبدال. سيتعامل الذكاء الاصطناعي مع المهام المتكررة، مما يتيح للمطورين التركيز على حل المشكلات المعقدة والهندسة. سيتطور الدور، ولن يختفي.",
+        upvotes: 120,
+        downvotes: 3,
+        timestamp: subDays(new Date(), 4).toISOString(),
+      },
+    ],
+  },
+
+  // --- Daily Challenge Questions ---
   {
     id: 'dc-1',
     type: 'challenge',
@@ -155,75 +179,98 @@ export const MOCK_DATA: Poll[] = [
     ],
     comments: [],
   },
-  // --- End Daily Challenge Questions ---
-  // User-generated Prediction
+
+  // --- Categorized Quizzes ---
+  // Islamic
   {
-    id: '3',
-    type: 'prediction',
-    category: 'tech',
-    question: 'هل سيحل الذكاء الاصطناعي محل مطوري البرمجيات في السنوات العشر القادمة؟',
-    timeframe: 'year',
-    options: [
-      { id: '3-1', text: 'نعم، بالكامل.', votes: 320 },
-      { id: '3-2', text: 'سيكون أداة قوية، وليس بديلاً.', votes: 2400 },
-      { id: '3-3', text: 'لا، الإبداع البشري لا يمكن تعويضه.', votes: 980 },
-    ],
-    comments: [
-        {
-        id: 'c3-1',
-        author: { name: 'مطور علاقات', avatarUrl: 'https://picsum.photos/seed/105/40/40' },
-        text: "الأمر كله يتعلق بالتعزيز، وليس الاستبدال. سيتعامل الذكاء الاصطناعي مع المهام المتكررة، مما يتيح للمطورين التركيز على حل المشكلات المعقدة والهندسة. سيتطور الدور، ولن يختفي.",
-        upvotes: 120,
-        downvotes: 3,
-        timestamp: subDays(new Date(), 4).toISOString(),
-      },
-    ],
-  },
-  // Admin-generated Islamic Question (Quiz) - Easy
-  {
-    id: '6',
+    id: 'islamic-easy-1',
     type: 'challenge',
     category: 'islamic',
     question: 'ما هو الشهر الذي أنزل فيه القرآن الكريم؟',
     difficulty: 'easy',
-    correctOptionId: '6-1',
+    correctOptionId: 'ie1-1',
     beatPercentage: 95,
     options: [
-      { id: '6-1', text: 'شهر رمضان', votes: 1800 },
-      { id: '6-2', text: 'شهر شوال', votes: 50 },
-      { id: '6-3', text: 'شهر ذو الحجة', votes: 25 },
+      { id: 'ie1-1', text: 'شهر رمضان', votes: 1800 },
+      { id: 'ie1-2', text: 'شهر شوال', votes: 50 },
+      { id: 'ie1-3', text: 'شهر ذو الحجة', votes: 25 },
     ],
     comments: [],
   },
-  // Admin-generated Islamic Question (Quiz) - Medium
   {
-    id: '7',
+    id: 'islamic-medium-1',
     type: 'challenge',
     category: 'islamic',
     question: 'من هو الصحابي الذي اهتز لموته عرش الرحمن؟',
     difficulty: 'medium',
-    correctOptionId: '7-2',
+    correctOptionId: 'im1-2',
     beatPercentage: 68,
     options: [
-      { id: '7-1', text: 'عمر بن الخطاب', votes: 450 },
-      { id: '7-2', text: 'سعد بن معاذ', votes: 1250 },
-      { id: '7-3', text: 'أبو بكر الصديق', votes: 300 },
+      { id: 'im1-1', text: 'عمر بن الخطاب', votes: 450 },
+      { id: 'im1-2', text: 'سعد بن معاذ', votes: 1250 },
+      { id: 'im1-3', text: 'أبو بكر الصديق', votes: 300 },
     ],
     comments: [],
   },
-    // Admin-generated Islamic Question (Quiz) - Hard
   {
-    id: '8',
+    id: 'islamic-hard-1',
     type: 'challenge',
     category: 'islamic',
     question: 'ما هي السورة التي وردت فيها سجدتان؟',
     difficulty: 'hard',
-    correctOptionId: '8-3',
+    correctOptionId: 'ih1-3',
     beatPercentage: 45,
     options: [
-      { id: '8-1', text: 'سورة السجدة', votes: 900 },
-      { id: '8-2', text: 'سورة فصلت', votes: 420 },
-      { id: '8-3', text: 'سورة الحج', votes: 680 },
+      { id: 'ih1-1', text: 'سورة السجدة', votes: 900 },
+      { id: 'ih1-2', text: 'سورة فصلت', votes: 420 },
+      { id: 'ih1-3', text: 'سورة الحج', votes: 680 },
+    ],
+    comments: [],
+  },
+   // Science
+  {
+    id: 'science-easy-1',
+    type: 'challenge',
+    category: 'science',
+    difficulty: 'easy',
+    question: 'ما هو الكوكب المعروف باسم "الكوكب الأحمر"؟',
+    correctOptionId: 'se1-1',
+    beatPercentage: 98,
+    options: [
+      { id: 'se1-1', text: 'المريخ', votes: 2500 },
+      { id: 'se1-2', text: 'الزهرة', votes: 100 },
+      { id: 'se1-3', text: 'المشتري', votes: 150 },
+    ],
+    comments: [],
+  },
+  {
+    id: 'science-medium-1',
+    type: 'challenge',
+    category: 'science',
+    difficulty: 'medium',
+    question: 'ما هو العنصر الكيميائي الذي رمزه "O"؟',
+    correctOptionId: 'sm1-2',
+    beatPercentage: 85,
+    options: [
+      { id: 'sm1-1', text: 'الذهب', votes: 200 },
+      { id: 'sm1-2', text: 'الأكسجين', votes: 1800 },
+      { id: 'sm1-3', text: 'الفضة', votes: 120 },
+    ],
+    comments: [],
+  },
+  // General
+  {
+    id: 'general-medium-1',
+    type: 'challenge',
+    category: 'general',
+    difficulty: 'medium',
+    question: 'في أي بلد تقع مدينة البتراء الأثرية؟',
+    correctOptionId: 'gm1-3',
+    beatPercentage: 78,
+    options: [
+      { id: 'gm1-1', text: 'مصر', votes: 300 },
+      { id: 'gm1-2', text: 'السعودية', votes: 150 },
+      { id: 'gm1-3', text: 'الأردن', votes: 1900 },
     ],
     comments: [],
   },

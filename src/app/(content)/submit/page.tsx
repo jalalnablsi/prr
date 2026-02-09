@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
-import { Image as ImageIcon, PlusCircle, X } from 'lucide-react';
+import { Image as ImageIcon, PlusCircle, X, Upload } from 'lucide-react';
+import Image from 'next/image';
 
 type Option = {
   text: string;
@@ -39,7 +40,17 @@ export default function SubmitPage() {
     newOptions[index][field] = value;
     setOptions(newOptions);
   };
-
+  
+  const handleFileChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleOptionChange(index, 'imageUrl', reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +79,7 @@ export default function SubmitPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="poll">استطلاع مجتمعي</SelectItem>
-                    <SelectItem value="challenge">تحدي يومي</SelectItem>
+                    <SelectItem value="challenge">تحدي / اختبار</SelectItem>
                     <SelectItem value="prediction">توقع</SelectItem>
                   </SelectContent>
                 </Select>
@@ -87,6 +98,7 @@ export default function SubmitPage() {
                     <SelectItem value="puzzles">ألغاز</SelectItem>
                     <SelectItem value="islamic">أسئلة إسلامية</SelectItem>
                     <SelectItem value="tech">تقنية</SelectItem>
+                    <SelectItem value="science">علوم</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -96,10 +108,10 @@ export default function SubmitPage() {
               <Textarea id="question" placeholder="مثال: ما هي أفضل لغة برمجة لتطوير الواجهات الأمامية؟" required />
             </div>
             <div className="space-y-4">
-              <Label>الخيارات</Label>
+              <Label className='text-base font-medium'>الخيارات</Label>
               {options.map((option, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <div className='w-full space-y-2'>
+                <div key={index} className="flex items-start gap-2 p-4 border rounded-lg bg-background">
+                  <div className='w-full space-y-3'>
                      <Input 
                         type="text" 
                         placeholder={`الخيار ${index + 1}`}
@@ -107,19 +119,36 @@ export default function SubmitPage() {
                         onChange={(e) => handleOptionChange(index, 'text', e.target.value)}
                         required 
                       />
-                      <div className="relative">
-                         <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                         <Input 
-                            type="text" 
-                            placeholder="رابط الصورة (اختياري)"
-                            value={option.imageUrl}
-                            onChange={(e) => handleOptionChange(index, 'imageUrl', e.target.value)}
-                            className="pl-10"
-                          />
+                      <div className="space-y-2">
+                         <Label className='text-xs text-muted-foreground'>صورة الخيار (اختياري)</Label>
+                         <div className="relative">
+                            <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input 
+                                type="text" 
+                                placeholder="أو الصق رابط الصورة هنا"
+                                value={option.imageUrl}
+                                onChange={(e) => handleOptionChange(index, 'imageUrl', e.target.value)}
+                                className="pl-10"
+                              />
+                         </div>
+                         <div className='relative'>
+                             <Button asChild variant="outline" className='w-full cursor-pointer'>
+                                <label>
+                                   <Upload className='ms-2' />
+                                   رفع صورة من جهازك
+                                   <input type="file" className="sr-only" accept="image/*" onChange={(e) => handleFileChange(index, e)} />
+                                </label>
+                             </Button>
+                         </div>
+                         {option.imageUrl && (
+                            <div className='relative w-full aspect-video mt-2 rounded-md overflow-hidden border'>
+                               <Image src={option.imageUrl} alt={`Preview ${index+1}`} fill className="object-cover" />
+                            </div>
+                         )}
                       </div>
                   </div>
                   {options.length > 2 && (
-                    <Button variant="ghost" size="icon" onClick={() => handleRemoveOption(index)}>
+                    <Button variant="ghost" size="icon" onClick={() => handleRemoveOption(index)} className='shrink-0'>
                       <X className="h-4 w-4" />
                     </Button>
                   )}
@@ -132,6 +161,23 @@ export default function SubmitPage() {
                 </Button>
               )}
             </div>
+             
+             {contentType === 'challenge' && (
+                <div className="space-y-2">
+                    <Label>مستوى الصعوبة</Label>
+                     <Select>
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر مستوى الصعوبة" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">سهل</SelectItem>
+                        <SelectItem value="medium">متوسط</SelectItem>
+                        <SelectItem value="hard">صعب</SelectItem>
+                      </SelectContent>
+                    </Select>
+                </div>
+             )}
+
 
             {contentType === 'prediction' && (
               <div className="space-y-2">

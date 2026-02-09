@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Lightbulb, Vote, BookOpen } from "lucide-react";
+import { Flame, Lightbulb, Vote, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -27,8 +27,8 @@ export default function Home() {
             <FeatureCard
               href="/challenges"
               icon={<Flame className="h-8 w-8 text-primary" />}
-              title="التحديات اليومية"
-              description="اختبر معلوماتك وحدسك مع تحديات جديدة كل يوم."
+              title="التحدي اليومي"
+              description="اختبر معلوماتك في لعبة اختبار سريعة ومتسلسلة."
             />
             <FeatureCard
               href="/predictions"
@@ -37,10 +37,10 @@ export default function Home() {
               description="توقع أحداثًا مستقبلية وشاهد ما إذا كان المجتمع يوافقك الرأي."
             />
              <FeatureCard
-              href="/islamic"
-              icon={<BookOpen className="h-8 w-8 text-primary" />}
-              title="أسئلة إسلامية"
-              description="اختبر و زد من معرفتك في العلوم الإسلامية."
+              href="/quizzes"
+              icon={<BrainCircuit className="h-8 w-8 text-primary" />}
+              title="اختبارات معرفية"
+              description="تحدى نفسك في مواضيع مختلفة بمستويات صعوبة متنوعة."
             />
           </div>
         </section>

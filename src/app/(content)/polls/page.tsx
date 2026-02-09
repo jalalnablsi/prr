@@ -17,16 +17,17 @@ const categoryTranslations: Record<string, string> = {
 };
 
 export default function PollsPage() {
-  const polls = MOCK_DATA.filter(item => item.type === 'poll');
-  const categories = ['general', ...Array.from(new Set(polls.map(p => p.category))).filter(c => c !== 'general')];
+  // We show polls and predictions on this page
+  const polls = MOCK_DATA.filter(item => item.type === 'poll' || item.type === 'prediction');
+  const categories = ['general', ...Array.from(new Set(polls.map(p => p.category))).filter(c => c !== 'general' && c !== 'islamic')];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-headline font-bold mb-2">استطلاعات المجتمع</h1>
-      <p className="text-muted-foreground mb-8">شاهد رأي المجتمع. شارك بصوتك!</p>
+      <h1 className="text-3xl font-headline font-bold mb-2">استطلاعات وتوقعات المجتمع</h1>
+      <p className="text-muted-foreground mb-8">شارك بصوتك، أدلي برأيك، وشاهد ما يفكر فيه الآخرون.</p>
       
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-8">
           {categories.map(category => (
             <TabsTrigger key={category} value={category}>
               {categoryTranslations[category] || category}
@@ -38,7 +39,7 @@ export default function PollsPage() {
           return (
             <TabsContent key={category} value={category}>
               {filteredItems.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredItems.map(item => (
                     <PollCard key={item.id} item={item} />
                   ))}
