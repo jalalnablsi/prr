@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Vote, BrainCircuit, Fingerprint } from "lucide-react";
+import { Flame, Vote, BrainCircuit, Fingerprint, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -17,7 +17,7 @@ export default function Home() {
           <p className="max-w-2xl mx-auto text-muted-foreground md:text-xl mb-8">
             المركز النهائي للتحديات واستطلاعات الرأي والتوقعات. تفاعل، صوّت، واعرف مكانتك.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             <FeatureCard
               href="/polls"
               icon={<Vote className="h-10 w-10 text-primary" />}
@@ -30,17 +30,23 @@ export default function Home() {
               title="التحدي اليومي"
               description="اختبر معلوماتك في لعبة اختبار سريعة ومتسلسلة."
             />
-            <FeatureCard
-              href="/stranger"
-              icon={<Fingerprint className="h-10 w-10 text-primary" />}
-              title="هناك غريب بيننا"
-              description="لعبة استنتاج اجتماعي لاكتشاف اللاعب الغريب."
+             <FeatureCard
+              href="/leaderboard"
+              icon={<Trophy className="h-10 w-10 text-primary" />}
+              title="المتصدرون"
+              description="شاهد ترتيبك وتحدى الأبطال في قاعة الشهرة."
             />
              <FeatureCard
               href="/quizzes"
               icon={<BrainCircuit className="h-10 w-10 text-primary" />}
               title="اختبارات معرفية"
               description="تحدى نفسك في مواضيع مختلفة بمستويات صعوبة متنوعة."
+            />
+            <FeatureCard
+              href="/stranger"
+              icon={<Fingerprint className="h-10 w-10 text-primary" />}
+              title="هناك غريب بيننا"
+              description="لعبة استنتاج اجتماعي لاكتشاف اللاعب الغريب."
             />
           </div>
         </section>

@@ -30,3 +30,10 @@ export type Poll = {
   difficulty?: 'easy' | 'medium' | 'hard'; // For islamic questions, etc.
   beatPercentage?: number; // For quizzes, percentage of users the player beat
 };
+
+export type LeaderboardUser = {
+  rank: number;
+  name: string;
+  avatarUrl: string;
+  score: number;
+};
