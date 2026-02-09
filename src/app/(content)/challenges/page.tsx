@@ -73,7 +73,7 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
                     <BrainCircuit className="h-4 w-4 ms-1" />
                     {categoryTranslations[item.category] || item.category}
                 </Badge>
-                <CardTitle className="text-3xl font-headline font-bold">{item.question}</CardTitle>
+                <CardTitle className="text-2xl md:text-3xl font-headline font-bold">{item.question}</CardTitle>
             </div>
             {!isAnswered && (
               <QuestionTimer duration={15} onTimeUp={handleTimeUp} isPaused={isAnswered} />
@@ -234,7 +234,7 @@ export default function DailyChallengePage() {
     if (quizState === 'finished') {
         return (
             <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
-                <Card className="max-w-lg text-center p-8">
+                <Card className="max-w-lg text-center p-6 md:p-8">
                     <CardHeader>
                         <Trophy className="h-16 w-16 text-primary mx-auto mb-4" />
                         <CardTitle className="text-3xl font-headline font-bold mb-2">اكتمل التحدي!</CardTitle>

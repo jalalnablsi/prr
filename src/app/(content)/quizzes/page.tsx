@@ -41,7 +41,7 @@ export default function QuizzesPage() {
         <p className="text-muted-foreground text-lg">تحدى معلوماتك في مختلف المجالات والمستويات.</p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 mb-8 p-4 border rounded-lg bg-card/50 sticky top-16 z-40">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8 p-4 border rounded-lg bg-card/50 md:sticky top-20 z-40">
         <div className="flex-1 space-y-2">
             <label className="text-sm font-medium">اختر الفئة</label>
             <Select value={selectedCategory} onValueChange={(val) => setSelectedCategory(val)}>

@@ -20,25 +20,25 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <FeatureCard
               href="/polls"
-              icon={<Vote className="h-8 w-8 text-primary" />}
+              icon={<Vote className="h-10 w-10 text-primary" />}
               title="استطلاعات المجتمع"
               description="صوّت على المواضيع الشائعة وشاهد رأي المجتمع."
             />
             <FeatureCard
               href="/challenges"
-              icon={<Flame className="h-8 w-8 text-primary" />}
+              icon={<Flame className="h-10 w-10 text-primary" />}
               title="التحدي اليومي"
               description="اختبر معلوماتك في لعبة اختبار سريعة ومتسلسلة."
             />
             <FeatureCard
               href="/predictions"
-              icon={<Lightbulb className="h-8 w-8 text-primary" />}
+              icon={<Lightbulb className="h-10 w-10 text-primary" />}
               title="أنشئ توقعات"
               description="توقع أحداثًا مستقبلية وشاهد ما إذا كان المجتمع يوافقك الرأي."
             />
              <FeatureCard
               href="/quizzes"
-              icon={<BrainCircuit className="h-8 w-8 text-primary" />}
+              icon={<BrainCircuit className="h-10 w-10 text-primary" />}
               title="اختبارات معرفية"
               description="تحدى نفسك في مواضيع مختلفة بمستويات صعوبة متنوعة."
             />

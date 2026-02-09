@@ -4,6 +4,7 @@ import { MOCK_DATA } from "@/lib/data";
 import { PollCard } from "@/components/poll-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Poll } from '@/lib/types';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const categoryTranslations: Record<string, string> = {
   sports: 'رياضة',
@@ -27,13 +28,16 @@ export default function PollsPage() {
       <p className="text-muted-foreground mb-8">شارك بصوتك، أدلي برأيك، وشاهد ما يفكر فيه الآخرون.</p>
       
       <Tabs defaultValue="general" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 mb-8">
-          {categories.map(category => (
-            <TabsTrigger key={category} value={category}>
-              {categoryTranslations[category] || category}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        <ScrollArea className="w-full pb-4">
+          <TabsList className="inline-flex w-max gap-3">
+            {categories.map(category => (
+              <TabsTrigger key={category} value={category} className="rounded-full data-[state=active]:shadow-lg">
+                {categoryTranslations[category] || category}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <ScrollBar orientation="horizontal" className="invisible" />
+        </ScrollArea>
         {categories.map(category => {
           const filteredItems = polls.filter(item => item.category === category);
           return (

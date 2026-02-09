@@ -11,7 +11,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Tajawal', 'sans-serif'],
-        headline: ['Tajawal', 'sans-serif'],
+        headline: ['Cairo', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

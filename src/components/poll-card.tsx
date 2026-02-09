@@ -201,7 +201,7 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
                 </Button>
              )}
         </CardContent>
-        <CardFooter className="mt-auto flex items-center justify-between text-xs text-muted-foreground pt-4 border-t">
+        <CardFooter className="mt-auto flex items-center justify-between text-sm text-muted-foreground pt-4 border-t">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span>{totalVotes.toLocaleString()} مشاركة</span>
