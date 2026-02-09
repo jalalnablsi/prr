@@ -2,6 +2,7 @@ import type { Poll } from '@/lib/types';
 import { subDays, addHours } from 'date-fns';
 
 export const MOCK_DATA: Poll[] = [
+  // User-generated Poll
   {
     id: '1',
     type: 'poll',
@@ -32,6 +33,7 @@ export const MOCK_DATA: Poll[] = [
       },
     ],
   },
+   // User-generated Poll with Images
   {
     id: '5',
     type: 'poll',
@@ -53,48 +55,32 @@ export const MOCK_DATA: Poll[] = [
       }
     ]
   },
+  // Admin-generated Daily Challenge (Quiz)
   {
     id: '2',
     type: 'challenge',
-    category: 'general',
-    question: 'هل سيصل سعر البيتكوين إلى 100,000 دولار بنهاية هذا العام؟',
+    category: 'math',
+    question: 'ما هو ناتج 15 * (4 + 6) / 2 ؟',
     endsAt: addHours(new Date(), 8).toISOString(),
+    correctOptionId: '2-3',
     options: [
-      { id: '2-1', text: 'نعم، بسهولة!', votes: 890 },
-      { id: '2-2', text: 'لا، السوق متقلب للغاية.', votes: 1560 },
+      { id: '2-1', text: '150', votes: 890 },
+      { id: '2-2', text: '50', votes: 345 },
+      { id: '2-3', text: '75', votes: 1560 },
+      { id: '2-4', text: '100', votes: 410 },
     ],
     comments: [
        {
         id: 'c2-1',
-        author: { name: 'ملك العملات', avatarUrl: 'https://picsum.photos/seed/104/40/40' },
-        text: 'حدث التنصيف مع الاستثمار المؤسسي يجعل 100 ألف دولار ليست مسألة إذا، ولكن متى.',
+        author: { name: 'خبير رياضيات', avatarUrl: 'https://picsum.photos/seed/104/40/40' },
+        text: 'تذكر ترتيب العمليات الحسابية! الأقواس أولاً.',
         upvotes: 55,
         downvotes: 10,
         timestamp: subDays(new Date(), 1).toISOString(),
       },
     ],
   },
-    {
-    id: '6',
-    type: 'poll',
-    category: 'islamic',
-    question: 'ما هو الشهر الذي أنزل فيه القرآن الكريم؟',
-    options: [
-      { id: '6-1', text: 'شهر رمضان', votes: 1800 },
-      { id: '6-2', text: 'شهر شوال', votes: 50 },
-      { id: '6-3', text: 'شهر ذو الحجة', votes: 25 },
-    ],
-    comments: [
-       {
-        id: 'c6-1',
-        author: { name: 'طالب علم', avatarUrl: 'https://picsum.photos/seed/109/40/40' },
-        text: 'قال تعالى: "شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ".',
-        upvotes: 98,
-        downvotes: 0,
-        timestamp: subDays(new Date(), 1).toISOString(),
-      },
-    ],
-  },
+  // User-generated Prediction
   {
     id: '3',
     type: 'prediction',
@@ -117,26 +103,58 @@ export const MOCK_DATA: Poll[] = [
       },
     ],
   },
+  // Admin-generated Islamic Question (Quiz) - Easy
   {
-    id: '4',
-    type: 'poll',
-    category: 'tech',
-    question: 'ما هو محرر الأكواد المفضل لديك؟',
+    id: '6',
+    type: 'challenge',
+    category: 'islamic',
+    question: 'ما هو الشهر الذي أنزل فيه القرآن الكريم؟',
+    difficulty: 'easy',
+    correctOptionId: '6-1',
     options: [
-      { id: '4-1', text: 'VS Code', votes: 3100 },
-      { id: '4-2', text: 'JetBrains IDEs (WebStorm, etc.)', votes: 950 },
-      { id: '4-3', text: 'Neovim / Vim', votes: 620 },
-      { id: '4-4', text: 'Sublime Text', votes: 150 },
+      { id: '6-1', text: 'شهر رمضان', votes: 1800 },
+      { id: '6-2', text: 'شهر شوال', votes: 50 },
+      { id: '6-3', text: 'شهر ذو الحجة', votes: 25 },
     ],
     comments: [
        {
-        id: 'c4-1',
-        author: { name: 'ساحر Vim', avatarUrl: 'https://picsum.photos/seed/107/40/40' },
-        text: 'بمجرد إتقان التحرير الشرطي في Vim، يبدو كل شيء آخر بطيئًا وغير فعال. منحنى التعلم حاد ولكنه يستحق العناء.',
-        upvotes: 78,
-        downvotes: 5,
+        id: 'c6-1',
+        author: { name: 'طالب علم', avatarUrl: 'https://picsum.photos/seed/109/40/40' },
+        text: 'قال تعالى: "شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ".',
+        upvotes: 98,
+        downvotes: 0,
         timestamp: subDays(new Date(), 1).toISOString(),
       },
     ],
+  },
+  // Admin-generated Islamic Question (Quiz) - Medium
+  {
+    id: '7',
+    type: 'challenge',
+    category: 'islamic',
+    question: 'من هو الصحابي الذي اهتز لموته عرش الرحمن؟',
+    difficulty: 'medium',
+    correctOptionId: '7-2',
+    options: [
+      { id: '7-1', text: 'عمر بن الخطاب', votes: 450 },
+      { id: '7-2', text: 'سعد بن معاذ', votes: 1250 },
+      { id: '7-3', text: 'أبو بكر الصديق', votes: 300 },
+    ],
+    comments: [],
+  },
+    // Admin-generated Islamic Question (Quiz) - Hard
+  {
+    id: '8',
+    type: 'challenge',
+    category: 'islamic',
+    question: 'ما هي السورة التي وردت فيها سجدتان؟',
+    difficulty: 'hard',
+    correctOptionId: '8-3',
+    options: [
+      { id: '8-1', text: 'سورة السجدة', votes: 900 },
+      { id: '8-2', text: 'سورة فصلت', votes: 420 },
+      { id: '8-3', text: 'سورة الحج', votes: 680 },
+    ],
+    comments: [],
   },
 ];

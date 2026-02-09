@@ -10,36 +10,67 @@ import { CommentSection } from './comment-section';
 import { useToast } from '@/hooks/use-toast';
 import { CountdownTimer } from './countdown-timer';
 import { cn } from '@/lib/utils';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 export function ContentPage({ item }: { item: Poll }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
   const [options, setOptions] = useState<PollOption[]>(item.options);
   const { toast } = useToast();
 
   const totalVotes = useMemo(() => {
-    return options.reduce((sum, option) => sum + option.votes, 0);
-  }, [options]);
+    return options.reduce((sum, option) => sum + option.votes, 0) + (isAnswered ? 0 : 1);
+  }, [options, isAnswered]);
 
+  const isQuiz = item.correctOptionId != null;
+  
   const handleVote = () => {
     if (selectedOption) {
-      setHasVoted(true);
+      setIsAnswered(true);
       setOptions(currentOptions =>
         currentOptions.map(opt =>
           opt.id === selectedOption ? { ...opt, votes: opt.votes + 1 } : opt
         )
       );
-      const chosenOptionText = options.find(o => o.id === selectedOption)?.text;
-      toast({
-        title: "تم التصويت!",
-        description: `لقد صوتت لصالح "${chosenOptionText}".`,
-      });
+      
+      const isCorrect = selectedOption === item.correctOptionId;
+
+      if (isQuiz) {
+        if (isCorrect) {
+          toast({
+            title: "إجابة صحيحة!",
+            description: "أحسنت! لقد اخترت الإجابة الصحيحة.",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "إجابة خاطئة",
+            description: "حظ أوفر في المرة القادمة. تم تظليل الإجابة الصحيحة.",
+          });
+        }
+      } else {
+        const chosenOptionText = options.find(o => o.id === selectedOption)?.text;
+        toast({
+          title: "تم التصويت!",
+          description: `لقد صوتت لصالح "${chosenOptionText}".`,
+        });
+      }
     }
   };
 
   const isChallengeEnded = item.type === 'challenge' && item.endsAt && new Date(item.endsAt) <= new Date();
-  const canVote = !hasVoted && !isChallengeEnded;
+  const canVote = !isAnswered && !isChallengeEnded;
   const hasImages = options.some(opt => opt.imageUrl);
+  
+  const getResultDescription = () => {
+      if (!isAnswered) {
+          return isQuiz ? "اختر الإجابة التي تعتقد أنها صحيحة." : "اختر خيارًا وأدلي بصوتك.";
+      }
+      if (isQuiz) {
+          return selectedOption === item.correctOptionId ? "أحسنت! هذه هي النتائج حتى الآن." : "إجابة خاطئة. هذه هي النتائج حتى الآن.";
+      }
+      return "شكرًا لتصويتك! إليك النتائج حتى الآن.";
+  }
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -50,32 +81,55 @@ export function ContentPage({ item }: { item: Poll }) {
             {item.type === 'challenge' && item.endsAt && <CountdownTimer endsAt={item.endsAt} />}
           </div>
           <CardDescription className="text-lg text-muted-foreground">
-            {hasVoted ? "إليك النتائج حتى الآن." : "اختر خيارًا وأدلي بصوتك."}
+            {getResultDescription()}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className={cn(
             "grid gap-4",
-            hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-4"
+            hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-2",
+            !hasImages && "grid-cols-1" // ensure single column when no images
           )}>
             {options.map((option) => {
-              const percentage = totalVotes > 0 ? (option.votes / totalVotes) * 100 : 0;
+              const currentVotes = option.id === selectedOption && isAnswered ? option.votes -1 : option.votes
+              const userVote = option.id === selectedOption && isAnswered ? 1 : 0
+              const percentage = totalVotes > 0 ? ((currentVotes + userVote) / totalVotes) * 100 : 0;
               const isSelected = option.id === selectedOption;
+              const isCorrectOption = option.id === item.correctOptionId;
 
-              if (hasVoted) {
+              if (isAnswered) {
+                 const isUserChoice = isSelected;
+                 const isWrongChoice = isUserChoice && !isCorrectOption;
+
                 return (
-                  <div key={option.id} className={cn("p-4 rounded-lg border-2", isSelected ? "border-primary bg-primary/10" : "border-transparent bg-card/50")}>
+                  <div key={option.id} className={cn(
+                      "p-4 rounded-lg border-2 transition-all",
+                      isQuiz && isCorrectOption ? "border-primary bg-primary/10" :
+                      isQuiz && isWrongChoice ? "border-destructive bg-destructive/10" :
+                      !isQuiz && isUserChoice ? "border-primary bg-primary/10" : "border-transparent bg-card/50"
+                  )}>
                     {option.imageUrl && (
                       <div className="relative w-full aspect-video mb-4 rounded-md overflow-hidden">
                         <Image src={option.imageUrl} alt={option.text} fill className="object-cover" />
                       </div>
                     )}
                     <div className="space-y-2">
-                      <div className="flex justify-between items-center text-sm">
-                        <p className={`font-medium ${isSelected ? 'text-primary' : ''}`}>{option.text}</p>
-                        <p className={`font-bold ${isSelected ? 'text-primary' : 'text-muted-foreground'}`}>{percentage.toFixed(1)}%</p>
+                      <div className="flex justify-between items-center text-sm font-medium">
+                        <p className="flex items-center gap-2">
+                           {isQuiz && isCorrectOption && <CheckCircle className="h-4 w-4 text-primary" />}
+                           {isQuiz && isWrongChoice && <XCircle className="h-4 w-4 text-destructive" />}
+                          <span>{option.text}</span>
+                        </p>
+                        <p className="font-bold">{percentage.toFixed(0)}%</p>
                       </div>
-                      <Progress value={percentage} className={isSelected ? '[&>div]:bg-primary' : ''} />
+                      <Progress 
+                        value={percentage} 
+                        className={cn(
+                          isQuiz && isCorrectOption && '[&>div]:bg-primary',
+                          isQuiz && isWrongChoice && '[&>div]:bg-destructive',
+                          !isQuiz && isUserChoice && '[&>div]:bg-primary'
+                        )} 
+                      />
                     </div>
                   </div>
                 )
@@ -116,16 +170,16 @@ export function ContentPage({ item }: { item: Poll }) {
               );
             })}
           </div>
-          {!hasVoted && (
+          {!isAnswered && (
             <div className="mt-6 text-center">
               <Button size="lg" onClick={handleVote} disabled={!selectedOption || !canVote}>
-                {isChallengeEnded ? 'انتهى التحدي' : 'أدلي بصوتي'}
+                {isChallengeEnded ? 'انتهى التحدي' : isQuiz ? 'تأكيد الإجابة' : 'أدلي بصوتي'}
               </Button>
             </div>
           )}
-          {hasVoted && selectedOption && (
+          {isAnswered && !isQuiz && selectedOption && (
             <div className="mt-6 text-center text-sm text-accent p-3 bg-accent/10 rounded-lg">
-                لقد صوتت مع {((options.find(o => o.id === selectedOption)!.votes / totalVotes) * 100).toFixed(0)}% من المشاركين.
+                لقد صوتت مع {(((options.find(o => o.id === selectedOption)!.votes) / totalVotes) * 100).toFixed(0)}% من المشاركين.
             </div>
           )}
         </CardContent>

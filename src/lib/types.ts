@@ -26,4 +26,6 @@ export type Poll = {
   comments: Comment[];
   endsAt?: string; // For challenges
   timeframe?: 'week' | 'month' | 'year'; // For predictions
+  correctOptionId?: string; // For quizzes/challenges
+  difficulty?: 'easy' | 'medium' | 'hard'; // For islamic questions, etc.
 };
