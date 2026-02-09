@@ -20,7 +20,7 @@ export type PollOption = {
 export type Poll = {
   id: string;
   type: 'poll' | 'challenge' | 'prediction';
-  category: 'sports' | 'games' | 'math' | 'puzzles' | 'islamic' | 'tech' | 'general';
+  category: 'sports' | 'games' | 'math' | 'puzzles' | 'islamic' | 'tech' | 'general' | 'science';
   question: string;
   options: PollOption[];
   comments: Comment[];

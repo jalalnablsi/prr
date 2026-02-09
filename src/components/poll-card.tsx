@@ -12,6 +12,7 @@ const categoryTranslations: Record<Poll['category'], string> = {
   islamic: 'إسلامية',
   tech: 'تقنية',
   general: 'عام',
+  science: 'علوم',
 };
 
 const difficultyTranslations: Record<Exclude<Poll['difficulty'], undefined>, string> = {
