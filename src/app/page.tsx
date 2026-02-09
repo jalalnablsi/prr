@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Lightbulb, Vote, BrainCircuit, Spy } from "lucide-react";
+import { Flame, Vote, BrainCircuit, Fingerprint } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -32,7 +32,7 @@ export default function Home() {
             />
             <FeatureCard
               href="/stranger"
-              icon={<Spy className="h-10 w-10 text-primary" />}
+              icon={<Fingerprint className="h-10 w-10 text-primary" />}
               title="هناك غريب بيننا"
               description="لعبة استنتاج اجتماعي لاكتشاف اللاعب الغريب."
             />

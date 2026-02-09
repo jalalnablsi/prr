@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Vote, Flame, BrainCircuit, PlusCircle, Spy } from 'lucide-react';
+import { Vote, Flame, BrainCircuit, PlusCircle, Fingerprint } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/polls', icon: Vote, label: 'استطلاعات' },
   { href: '/challenges', icon: Flame, label: 'التحدي' },
   { href: '/quizzes', icon: BrainCircuit, label: 'اختبارات' },
-  { href: '/stranger', icon: Spy, label: 'غريب بيننا' },
+  { href: '/stranger', icon: Fingerprint, label: 'غريب بيننا' },
 ];
 
 export function BottomNavBar() {

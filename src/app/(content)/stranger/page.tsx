@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter }
 import { Slider } from '@/components/ui/slider';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
-import { Eye, EyeOff, Users, RefreshCw, Spy } from 'lucide-react';
+import { Eye, EyeOff, Users, RefreshCw, Fingerprint } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const gameTopics = PlaceHolderImages.filter(img => img.imageHint === 'stranger_game');
@@ -55,7 +55,7 @@ export default function StrangerGamePage() {
             <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[70vh]">
                 <Card className="max-w-md w-full">
                     <CardHeader className="text-center">
-                        <Spy className="h-16 w-16 text-primary mx-auto mb-4" />
+                        <Fingerprint className="h-16 w-16 text-primary mx-auto mb-4" />
                         <CardTitle className="text-3xl font-headline">لعبة: هناك غريب بيننا</CardTitle>
                         <CardDescription className="text-lg pt-2">لعبة استنتاج اجتماعي لاكتشاف اللاعب الغريب. اجمع أصدقاءك وابدأ اللعب!</CardDescription>
                     </CardHeader>
