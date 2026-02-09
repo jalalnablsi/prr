@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Vote, Flame, BrainCircuit, Fingerprint, Trophy } from 'lucide-react';
+import { Vote, Flame, BrainCircuit, Fingerprint, Trophy, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { href: '/polls', icon: Vote, label: 'استطلاعات' },
+  { href: '/predictions', icon: Lightbulb, label: 'توقعات' },
   { href: '/challenges', icon: Flame, label: 'التحدي' },
   { href: '/leaderboard', icon: Trophy, label: 'المتصدرون' },
   { href: '/quizzes', icon: BrainCircuit, label: 'اختبارات' },
@@ -18,9 +19,7 @@ export function BottomNavBar() {
 
   const getIsActive = (href: string) => {
     if (href === '/') return pathname === '/';
-    if (href === '/polls') {
-        return pathname.startsWith('/polls');
-    }
+    // This logic handles nested routes, e.g. /polls/some-id will still activate the /polls tab
     return pathname.startsWith(href);
   };
 
@@ -35,7 +34,7 @@ export function BottomNavBar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 p-2 transition-colors w-1/5",
+                "flex flex-col items-center justify-center gap-1 p-2 transition-colors",
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >

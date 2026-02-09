@@ -18,13 +18,12 @@ const categoryTranslations: Record<string, string> = {
 };
 
 export default function PollsPage() {
-  // We show polls and predictions on this page
-  const polls = MOCK_DATA.filter(item => item.type === 'poll' || item.type === 'prediction');
+  const polls = MOCK_DATA.filter(item => item.type === 'poll');
   const categories = ['general', ...Array.from(new Set(polls.map(p => p.category))).filter(c => c !== 'general' && c !== 'islamic')];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-headline font-bold mb-2">استطلاعات وتوقعات المجتمع</h1>
+      <h1 className="text-3xl font-headline font-bold mb-2">استطلاعات المجتمع</h1>
       <p className="text-muted-foreground mb-8">شارك بصوتك، أدلي برأيك، وشاهد ما يفكر فيه الآخرون.</p>
       
       <Tabs defaultValue="general" className="w-full">

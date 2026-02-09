@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Vote, BrainCircuit, Fingerprint, Trophy } from "lucide-react";
+import { Flame, Vote, BrainCircuit, Fingerprint, Trophy, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -23,6 +23,12 @@ export default function Home() {
               icon={<Vote className="h-10 w-10 text-primary" />}
               title="استطلاعات المجتمع"
               description="صوّت على المواضيع الشائعة وشاهد رأي المجتمع."
+            />
+            <FeatureCard
+              href="/predictions"
+              icon={<Lightbulb className="h-10 w-10 text-primary" />}
+              title="التوقعات"
+              description="ماذا يحمل المستقبل؟ شارك بتوقعك وانظر إذا كان الآخرون يوافقونك الرأي."
             />
             <FeatureCard
               href="/challenges"
