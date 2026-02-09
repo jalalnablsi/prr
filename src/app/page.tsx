@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Flame, Lightbulb, Vote, BrainCircuit } from "lucide-react";
+import { Flame, Lightbulb, Vote, BrainCircuit, Spy } from "lucide-react";
 import Link from "next/link";
 import { Icons } from "@/components/icons";
 
@@ -31,10 +31,10 @@ export default function Home() {
               description="اختبر معلوماتك في لعبة اختبار سريعة ومتسلسلة."
             />
             <FeatureCard
-              href="/predictions"
-              icon={<Lightbulb className="h-10 w-10 text-primary" />}
-              title="أنشئ توقعات"
-              description="توقع أحداثًا مستقبلية وشاهد ما إذا كان المجتمع يوافقك الرأي."
+              href="/stranger"
+              icon={<Spy className="h-10 w-10 text-primary" />}
+              title="هناك غريب بيننا"
+              description="لعبة استنتاج اجتماعي لاكتشاف اللاعب الغريب."
             />
              <FeatureCard
               href="/quizzes"
