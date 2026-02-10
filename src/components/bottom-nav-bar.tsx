@@ -2,12 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Vote, Flame, BrainCircuit, Fingerprint, Trophy, Lightbulb } from 'lucide-react';
+import { Flame, BrainCircuit, Fingerprint, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { href: '/polls', icon: Vote, label: 'استطلاعات' },
-  { href: '/predictions', icon: Lightbulb, label: 'توقعات' },
   { href: '/challenges', icon: Flame, label: 'التحدي' },
   { href: '/leaderboard', icon: Trophy, label: 'المتصدرون' },
   { href: '/quizzes', icon: BrainCircuit, label: 'اختبارات' },
