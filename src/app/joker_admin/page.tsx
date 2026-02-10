@@ -124,7 +124,14 @@ export default function AdminPage() {
         title: "تم الحفظ!",
         description: "تم إنشاء المحتوى بنجاح.",
       });
-      form.reset();
+      form.reset({
+        type: data.type,
+        category: data.category,
+        question: "",
+        options: [{ text: "", imageUrl: "" }, { text: "", imageUrl: "" }],
+        correctOptionId: undefined,
+        difficulty: undefined,
+      });
     }
   };
   return (
@@ -153,7 +160,7 @@ export default function AdminPage() {
                                 render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>نوع المحتوى</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                     </FormControl>
@@ -173,7 +180,7 @@ export default function AdminPage() {
                                 render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>الفئة</FormLabel>
-                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                     <FormControl>
                                         <SelectTrigger><SelectValue /></SelectTrigger>
                                     </FormControl>
@@ -263,7 +270,7 @@ export default function AdminPage() {
                                     render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>الإجابة الصحيحة</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="اختر الإجابة الصحيحة" />
@@ -288,7 +295,7 @@ export default function AdminPage() {
                                     render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>مستوى الصعوبة</FormLabel>
-                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <Select onValueChange={field.onChange} value={field.value}>
                                         <FormControl>
                                             <SelectTrigger><SelectValue placeholder="اختر مستوى الصعوبة" /></SelectTrigger>
                                         </FormControl>
