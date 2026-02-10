@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2, CalendarX } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getRandomChallenges, getUserGlobalStats, completeDailyChallenge } from '@/app/actions/challenge';
+import WebApp from '@twa-dev/sdk';
 
 const categoryTranslations: Record<Poll['category'], string> = {
   sports: 'رياضة',
@@ -153,6 +154,27 @@ export default function DailyChallengePage() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<{ questionId: string; isCorrect: boolean }[]>([]);
     const [globalStats, setGlobalStats] = useState<{ beatPercentage: number, totalPoints: number } | null>(null);
+
+    // Ad effect for results screen
+    useEffect(() => {
+        let adShown = false;
+        if (quizState === 'finished') {
+            try {
+                if (WebApp.isVersionAtLeast('6.9')) {
+                    WebApp.showBannerAd({}).then(isShown => {
+                        adShown = isShown;
+                    });
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        return () => {
+            if (adShown) {
+                WebApp.hideBannerAd();
+            }
+        }
+    }, [quizState]);
 
     // التحقق هل أكمل التحدي اليوم؟
     const hasPlayedToday = useMemo(() => {

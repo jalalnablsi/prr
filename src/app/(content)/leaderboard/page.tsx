@@ -8,6 +8,7 @@ import { Crown, Trophy, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { useToast } from '@/hooks/use-toast';
+import WebApp from '@twa-dev/sdk';
 
 // تعريف واجهة المستخدم ليتوافق مع البيانات
 interface LeaderboardUser {
@@ -59,6 +60,25 @@ export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+
+  useEffect(() => {
+    let adShown = false;
+    try {
+      if (WebApp.isVersionAtLeast('6.9')) {
+        WebApp.showBannerAd({}).then(isShown => {
+            adShown = isShown;
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    
+    return () => {
+      if (adShown) {
+        WebApp.hideBannerAd();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {

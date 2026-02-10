@@ -15,6 +15,7 @@ import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2 } from '
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import WebApp from '@twa-dev/sdk';
 
 const categoryTranslations: Record<string, string> = {
   sports: 'رياضة',
@@ -189,6 +190,27 @@ export default function QuizzesPage() {
   const [quizState, setQuizState] = useState<'not_started' | 'in_progress' | 'finished'>('not_started');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ questionId: string; isCorrect: boolean }[]>([]);
+
+  // Ad effect for results screen
+  useEffect(() => {
+    let adShown = false;
+    if (quizState === 'finished') {
+        try {
+            if (WebApp.isVersionAtLeast('6.9')) {
+                WebApp.showBannerAd({}).then(isShown => {
+                    adShown = isShown;
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+    return () => {
+        if (adShown) {
+            WebApp.hideBannerAd();
+        }
+    }
+  }, [quizState]);
 
   useEffect(() => {
     const fetchCategories = async () => {
