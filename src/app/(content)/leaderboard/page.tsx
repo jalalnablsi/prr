@@ -56,15 +56,6 @@ function LeaderboardCard({ user }: { user: LeaderboardUser }) {
     )
 }
 
-function AdBanner({ className }: { className?: string }) {
-  return (
-    <div className={cn("w-full max-w-2xl mx-auto mt-8 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
-      <p className="font-bold text-primary">محاكاة إعلان بانر</p>
-      <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
-    </div>
-  );
-}
-
 export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
@@ -159,7 +150,6 @@ export default function LeaderboardPage() {
                 )}
             </div>
         )}
-        <AdBanner />
     </div>
   );
 }

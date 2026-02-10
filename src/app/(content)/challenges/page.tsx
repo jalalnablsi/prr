@@ -12,6 +12,7 @@ import { useAuth as useUser } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2, CalendarX } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { getRandomChallenges, getUserGlobalStats, completeDailyChallenge } from '@/app/actions/challenge';
 import WebApp from '@twa-dev/sdk';
 
@@ -143,6 +144,14 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
   );
 }
 
+function AdBanner({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-full max-w-lg mx-auto mt-8 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
+      <p className="font-bold text-primary">محاكاة إعلان بانر</p>
+      <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
+    </div>
+  );
+}
 
 export default function DailyChallengePage() {
     const { user, awardPoints } = useUser();
@@ -202,6 +211,12 @@ export default function DailyChallengePage() {
     const startQuiz = () => {
         if (!user) return;
         setQuizState('in_progress');
+        setCurrentQuestionIndex(0);
+        setAnswers([]);
+    };
+
+    const resetQuiz = () => {
+        setQuizState('not_started');
         setCurrentQuestionIndex(0);
         setAnswers([]);
     };
@@ -310,6 +325,7 @@ export default function DailyChallengePage() {
                         <Button size="lg" className="w-full" onClick={() => window.location.href = '/quizzes'}>
                            الذهاب للمزيد من الاختبارات
                         </Button>
+                        <AdBanner />
                     </CardContent>
                 </Card>
             </div>
@@ -320,8 +336,29 @@ export default function DailyChallengePage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="max-w-4xl mx-auto mb-4">
-                <p className="text-center text-muted-foreground mb-2">السؤال {currentQuestionIndex + 1} من {totalQuestions}</p>
+            <div className="max-w-4xl mx-auto mb-4 space-y-4">
+                 <div className="flex justify-between items-center">
+                    <p className="text-center text-muted-foreground">السؤال {currentQuestionIndex + 1} من {totalQuestions}</p>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="destructive" size="sm">إنهاء التحدي</Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>هل أنت متأكد؟</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    سيؤدي هذا إلى إنهاء التحدي الحالي. لن يتم حفظ تقدمك.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                                <AlertDialogAction onClick={resetQuiz}>
+                                    إنهاء التحدي
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                 </div>
                 <Progress value={((currentQuestionIndex + 1) / totalQuestions) * 100} />
             </div>
             <QuizQuestion 

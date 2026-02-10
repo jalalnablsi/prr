@@ -13,6 +13,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import WebApp from '@twa-dev/sdk';
@@ -175,6 +176,14 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
   );
 }
 
+function AdBanner({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-full max-w-lg mx-auto mt-4 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
+      <p className="font-bold text-primary">محاكاة إعلان بانر</p>
+      <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
+    </div>
+  );
+}
 
 export default function QuizzesPage() {
   const { user, awardPoints } = useUser();
@@ -390,6 +399,7 @@ export default function QuizzesPage() {
                          <RefreshCw className="ms-2 h-4 w-4" />
                           العودة لقائمة الاختبارات
                       </Button>
+                      <AdBanner />
                   </CardContent>
               </Card>
           </div>
@@ -416,8 +426,29 @@ export default function QuizzesPage() {
 
   return (
       <div className="container mx-auto px-4 py-8">
-          <div className="max-w-4xl mx-auto mb-4">
-              <p className="text-center text-muted-foreground mb-2">السؤال {currentQuestionIndex + 1} من {totalQuestions}</p>
+          <div className="max-w-4xl mx-auto mb-4 space-y-4">
+              <div className="flex justify-between items-center">
+                <p className="text-center text-muted-foreground">السؤال {currentQuestionIndex + 1} من {totalQuestions}</p>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button variant="destructive" size="sm">إنهاء الاختبار</Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>هل أنت متأكد؟</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                سيؤدي هذا إلى إنهاء الاختبار الحالي والعودة إلى شاشة الاختيار.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>إلغاء</AlertDialogCancel>
+                            <AlertDialogAction onClick={restartQuiz}>
+                                إنهاء الاختبار
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+              </div>
               <Progress value={((currentQuestionIndex + 1) / totalQuestions) * 100} />
           </div>
           <QuizQuestion 
