@@ -159,19 +159,17 @@ export default function DailyChallengePage() {
     useEffect(() => {
         let adShown = false;
         if (quizState === 'finished') {
-            try {
-                if (WebApp.isVersionAtLeast('6.9')) {
-                    WebApp.showBannerAd({}).then(isShown => {
-                        adShown = isShown;
-                    });
-                }
-            } catch (e) {
-                console.error(e);
+            // Check if BannerAd API is available
+            if (WebApp.isVersionAtLeast('6.9')) {
+                WebApp.showBannerAd().then(isShown => {
+                    adShown = isShown;
+                }).catch(e => console.error("Banner Ad Error:", e));
             }
         }
         return () => {
+            // Hide banner when component unmounts or state changes
             if (adShown) {
-                WebApp.hideBannerAd();
+                WebApp.hideBannerAd().catch(e => console.error("Hide Banner Ad Error:", e));
             }
         }
     }, [quizState]);

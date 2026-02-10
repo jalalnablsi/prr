@@ -11,6 +11,15 @@ import { cn } from '@/lib/utils';
 
 const gameTopics = PlaceHolderImages.filter(img => img.imageHint === 'stranger_game');
 
+function AdBanner({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-full max-w-lg mx-auto mt-4 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
+      <p className="font-bold text-primary">محاكاة إعلان بانر</p>
+      <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
+    </div>
+  );
+}
+
 export default function StrangerGamePage() {
     const [gameState, setGameState] = useState<'setup' | 'reveal' | 'discuss' | 'end'>('setup');
     const [numPlayers, setNumPlayers] = useState(4);
@@ -166,10 +175,11 @@ export default function StrangerGamePage() {
                                 {topic?.imageUrl && <Image src={topic.imageUrl} alt={topic.description} fill className="object-cover" />}
                             </div>
                         </div>
-                        <Button size="lg" className="w-full" onClick={handleReset}>
+                         <Button size="lg" className="w-full" onClick={handleReset}>
                             <RefreshCw className="ms-2" />
                             العب مرة أخرى
                         </Button>
+                        <AdBanner />
                     </CardContent>
                 </Card>
             </div>

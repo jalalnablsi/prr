@@ -56,48 +56,35 @@ function LeaderboardCard({ user }: { user: LeaderboardUser }) {
     )
 }
 
+function AdBanner({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-full max-w-2xl mx-auto mt-8 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
+      <p className="font-bold text-primary">محاكاة إعلان بانر</p>
+      <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
+    </div>
+  );
+}
+
 export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    let adShown = false;
-    try {
-      if (WebApp.isVersionAtLeast('6.9')) {
-        WebApp.showBannerAd({}).then(isShown => {
-            adShown = isShown;
-        });
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    
-    return () => {
-      if (adShown) {
-        WebApp.hideBannerAd();
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     const fetchLeaderboard = async () => {
       setLoading(true);
       
-      // جلب البيانات من جدول leaderboard مرتبة حسب النقاط تنازلياً
       const { data, error } = await supabase
         .from('leaderboard')
         .select('*')
         .order('total_score', { ascending: false })
-        .limit(100); // جلب أفضل 100 مستخدم
+        .limit(100);
 
       if (error) {
         console.error('Error fetching leaderboard:', error);
         toast({ variant: "destructive", title: "خطأ في جلب القائمة" });
       } else if (data) {
-        // تحويل البيانات من قاعدة البيانات إلى الشكل الذي يتوقعه المكون
         const formattedData: LeaderboardUser[] = data.map((item: any, index: number) => {
-          // إضافة ألقاب بسيطة لأصحاب المراتب الثلاثة الأولى
           let title: string | null = null;
           if (index === 0) title = "البطل";
           else if (index === 1) title = "الوصيف";
@@ -105,9 +92,9 @@ export default function LeaderboardPage() {
 
           return {
             rank: index + 1,
-            name: item.username || 'مستخدم مجهول', // استخدام username من قاعدة البيانات
-            avatarUrl: item.avatar_url, // استخدام avatar_url
-            score: item.total_score, // استخدام total_score
+            name: item.username || 'مستخدم مجهول',
+            avatarUrl: item.avatar_url,
+            score: item.total_score,
             title: title
           };
         });
@@ -172,6 +159,7 @@ export default function LeaderboardPage() {
                 )}
             </div>
         )}
+        <AdBanner />
     </div>
   );
 }
