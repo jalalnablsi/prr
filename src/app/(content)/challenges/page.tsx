@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { MOCK_DATA } from "@/lib/data";
 import type { Poll } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { QuestionTimer } from '@/components/question-timer';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth as useUser } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2, CalendarX } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { getRandomChallenges, getUserGlobalStats, completeDailyChallenge } from '@/app/actions/challenge';
 
 const categoryTranslations: Record<Poll['category'], string> = {
   sports: 'رياضة',
@@ -24,6 +25,7 @@ const categoryTranslations: Record<Poll['category'], string> = {
   science: 'علوم',
 };
 
+// مكون السؤال (داخلي)
 function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect: boolean) => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -32,11 +34,7 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
   const handleTimeUp = () => {
     if (!isAnswered) {
       setIsAnswered(true);
-      toast({
-        variant: "destructive",
-        title: "انتهى الوقت!",
-        description: "لم تختر إجابة في الوقت المحدد.",
-      });
+      toast({ variant: "destructive", title: "انتهى الوقت!" });
       onAnswered(false);
     }
   };
@@ -45,18 +43,11 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
     if (isAnswered) return;
     if (selectedOption) {
         setIsAnswered(true);
-        const isCorrect = selectedOption === item.correctOptionId;
+        const isCorrect = String(selectedOption) === String(item.correctOptionId);
         if (isCorrect) {
-          toast({
-            title: "إجابة صحيحة!",
-            description: "أحسنت! لننتقل للسؤال التالي.",
-          });
+          toast({ title: "إجابة صحيحة!" });
         } else {
-          toast({
-            variant: "destructive",
-            title: "إجابة خاطئة",
-            description: "حظ أوفر في المرة القادمة. تم تظليل الإجابة الصحيحة.",
-          });
+          toast({ variant: "destructive", title: "إجابة خاطئة" });
         }
         onAnswered(isCorrect);
     }
@@ -79,24 +70,18 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
               <QuestionTimer duration={15} onTimeUp={handleTimeUp} isPaused={isAnswered} />
             )}
           </div>
-          <CardDescription className="text-lg text-muted-foreground">
-            {isAnswered ? "تم تسجيل إجابتك. الإجابة الصحيحة مظللة." : "اختر الإجابة التي تعتقد أنها صحيحة."}
+          <CardDescription>
+            {isAnswered ? "تم تسجيل إجابتك." : "اختر الإجابة الصحيحة."}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className={cn(
-            "grid gap-4",
-            hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-2",
-            !hasImages && "grid-cols-1"
-          )}>
+          <div className={cn("grid gap-4", hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-2")}>
             {item.options.map((option) => {
               const isSelected = option.id === selectedOption;
               const isCorrectOption = option.id === item.correctOptionId;
               
               if (isAnswered) {
-                 const isUserChoice = isSelected;
-                 const isWrongChoice = isUserChoice && !isCorrectOption;
-
+                 const isWrongChoice = isSelected && !isCorrectOption;
                 return (
                   <div key={option.id} className={cn(
                       "p-4 rounded-lg border-2 transition-all",
@@ -119,15 +104,10 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
               
               if(hasImages) {
                  return (
-                  <div 
-                    key={option.id} 
-                    onClick={() => !isAnswered && setSelectedOption(option.id)}
-                    className={cn(
-                      "rounded-lg border-2 bg-card/50 overflow-hidden cursor-pointer transition-all",
+                  <div key={option.id} onClick={() => !isAnswered && setSelectedOption(option.id)}
+                    className={cn("rounded-lg border-2 bg-card/50 overflow-hidden cursor-pointer transition-all",
                       isSelected ? "border-primary shadow-lg" : "border-border hover:border-primary/50",
-                      isAnswered && "cursor-not-allowed opacity-70"
-                    )}
-                  >
+                      isAnswered && "cursor-not-allowed opacity-70")}>
                      {option.imageUrl && (
                       <div className="relative w-full aspect-video">
                         <Image src={option.imageUrl} alt={option.text} fill className="object-cover" />
@@ -140,12 +120,10 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
 
               return (
                 <div key={option.id}>
-                  <Button
-                    variant={isSelected ? 'default' : 'secondary'}
+                  <Button variant={isSelected ? 'default' : 'secondary'}
                     className="w-full justify-start h-auto py-3 px-4 text-left"
                     onClick={() => !isAnswered && setSelectedOption(option.id)}
-                    disabled={isAnswered}
-                  >
+                    disabled={isAnswered}>
                     {option.text}
                   </Button>
                 </div>
@@ -154,7 +132,7 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
           </div>
           {!isAnswered && (
             <div className="mt-6 text-center">
-              <Button size="lg" onClick={handleVote} disabled={!selectedOption || isAnswered}>
+              <Button size="lg" onClick={handleVote} disabled={!selectedOption}>
                 تأكيد الإجابة
               </Button>
             </div>
@@ -166,50 +144,110 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
 
 
 export default function DailyChallengePage() {
-    const dailyChallenges = useMemo(() => MOCK_DATA.filter(item => item.type === 'challenge' && item.category !== 'islamic'), []);
-    
-    const [quizState, setQuizState] = useState<'not_started' | 'in_progress' | 'finished'>('not_started');
+    const { user, awardPoints } = useUser();
+    const { toast } = useToast();
+
+    const [questions, setQuestions] = useState<Poll[]>([]);
+    const [loadingQuestions, setLoadingQuestions] = useState(true);
+    const [quizState, setQuizState] = useState<'not_started' | 'in_progress' | 'finished' | 'completed_today'>('not_started');
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<{ questionId: string; isCorrect: boolean }[]>([]);
+    const [globalStats, setGlobalStats] = useState<{ beatPercentage: number, totalPoints: number } | null>(null);
+
+    // التحقق هل أكمل التحدي اليوم؟
+    const hasPlayedToday = useMemo(() => {
+        if (!user?.last_daily_challenge_at) return false;
+        const lastDate = new Date(user.last_daily_challenge_at);
+        const today = new Date();
+        return lastDate.getDate() === today.getDate() &&
+               lastDate.getMonth() === today.getMonth() &&
+               lastDate.getFullYear() === today.getFullYear();
+    }, [user]);
+
+    useEffect(() => {
+        const fetchQuestions = async () => {
+            setLoadingQuestions(true);
+            const data = await getRandomChallenges();
+            setQuestions(data);
+            setLoadingQuestions(false);
+            
+            // تحديث الحالة إذا كان قد لعب اليوم
+            if (hasPlayedToday) {
+                setQuizState('completed_today');
+            }
+        };
+        fetchQuestions();
+    }, [hasPlayedToday]);
 
     const startQuiz = () => {
+        if (!user) return;
         setQuizState('in_progress');
         setCurrentQuestionIndex(0);
         setAnswers([]);
     };
 
-    const handleAnswer = (isCorrect: boolean) => {
-        setAnswers(prev => [...prev, { questionId: dailyChallenges[currentQuestionIndex].id, isCorrect }]);
+    const handleAnswer = async (isCorrect: boolean) => {
+        setAnswers(prev => [...prev, { questionId: questions[currentQuestionIndex].id, isCorrect }]);
+        
+        // === الحل لمشكلة البطء ===
+        // نحدد النقاط فوراً في الواجهة قبل الاتصال بالسيرفر
+        if (isCorrect && user) {
+            // هذا الاستدعاء سيحدث واجهة المستخدم فوراً (Optimistic)
+            await awardPoints(1, 'daily_challenge_correct', { question_id: questions[currentQuestionIndex].id });
+        }
         
         setTimeout(() => {
-            if (currentQuestionIndex < dailyChallenges.length - 1) {
+            if (currentQuestionIndex < questions.length - 1) {
                 setCurrentQuestionIndex(prev => prev + 1);
             } else {
-                setQuizState('finished');
+                finishQuiz();
             }
         }, 1500);
     };
-    
-    const restartQuiz = () => {
-        setQuizState('not_started');
-        setCurrentQuestionIndex(0);
-        setAnswers([]);
+
+    const finishQuiz = async () => {
+        setQuizState('finished');
+        
+        // تسجيل اكتمال التحدي في قاعدة البيانات
+        if (user) {
+            await completeDailyChallenge(user.id);
+            const stats = await getUserGlobalStats(user.id);
+            setGlobalStats(stats);
+        }
     };
 
-    const totalScore = useMemo(() => answers.filter(a => a.isCorrect).length, [answers]);
-    const totalQuestions = dailyChallenges.length;
+    const totalScore = answers.filter(a => a.isCorrect).length;
+    const totalQuestions = questions.length;
 
-    const averageBeatPercentage = useMemo(() => {
-        if (answers.length === 0) return 0;
-        const correctAnswers = answers.filter(a => a.isCorrect);
-        if (correctAnswers.length === 0) return 0;
+    if (loadingQuestions) {
+        return (
+            <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="animate-spin h-10 w-10 text-primary" />
+            </div>
+        );
+    }
 
-        const answeredQuestionIds = correctAnswers.map(a => a.questionId);
-        const answeredQuestions = dailyChallenges.filter(q => answeredQuestionIds.includes(q.id));
-        
-        const totalBeatPercentage = answeredQuestions.reduce((acc, q) => acc + (q.beatPercentage || 0), 0);
-        return Math.round(totalBeatPercentage / answeredQuestions.length);
-    }, [answers, dailyChallenges]);
+    // حالة: لعب اليوم بالفعل
+    if (quizState === 'completed_today') {
+        return (
+            <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
+                <Card className="max-w-md text-center">
+                    <CardHeader>
+                        <CalendarX className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                        <CardTitle className="text-2xl font-bold">اكتمل تحدي اليوم!</CardTitle>
+                        <CardDescription>
+                            لقد أتممت التحدي اليومي بالفعل. عد غداً لتحدي جديد أو جرب اختبارات أخرى لزيادة نقاطك.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Button variant="outline" onClick={() => window.location.href = '/quizzes'}>
+                            الذهاب للاختبارات
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        )
+    }
 
     if (quizState === 'not_started') {
         return (
@@ -218,11 +256,11 @@ export default function DailyChallengePage() {
                     <CardHeader>
                         <CardTitle className="text-3xl font-headline font-bold mb-2">التحدي اليومي</CardTitle>
                         <CardDescription className="text-lg">
-                            استعد لاختبار معلوماتك في سلسلة من {totalQuestions} أسئلة سريعة عبر فئات مختلفة.
+                            سلسلة من {totalQuestions} أسئلة عشوائية. يمكنك إكمال هذا التحدي مرة واحدة يومياً.
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Button size="lg" onClick={startQuiz}>
+                        <Button size="lg" onClick={startQuiz} disabled={!user}>
                             ابدأ التحدي
                         </Button>
                     </CardContent>
@@ -237,19 +275,20 @@ export default function DailyChallengePage() {
                 <Card className="max-w-lg text-center p-6 md:p-8">
                     <CardHeader>
                         <Trophy className="h-16 w-16 text-primary mx-auto mb-4" />
-                        <CardTitle className="text-3xl font-headline font-bold mb-2">اكتمل التحدي!</CardTitle>
+                        <CardTitle className="text-3xl font-headline font-bold mb-2">رائع!</CardTitle>
                         <CardDescription className="text-lg">
-                            لقد أجبت بشكل صحيح على {totalScore} من {totalQuestions} أسئلة.
+                            أجبت بشكل صحيح على {totalScore} من {totalQuestions}.
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg">
-                            <p className="text-lg font-semibold">أداء رائع!</p>
-                            <p className="text-muted-foreground">لقد تفوقت على {averageBeatPercentage}% من المشاركين في الأسئلة التي أجبت عليها بشكل صحيح.</p>
+                        <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg space-y-2">
+                            <p className="text-lg font-semibold">مجموع نقاطك الحالي:</p>
+                            <div className="text-2xl font-bold text-primary">
+                                {user?.points || 0}
+                            </div>
                         </div>
-                        <Button size="lg" onClick={restartQuiz}>
-                           <RefreshCw className="ms-2 h-4 w-4" />
-                            إعادة التحدي
+                        <Button size="lg" className="w-full" onClick={() => window.location.href = '/quizzes'}>
+                           الذهاب للمزيد من الاختبارات
                         </Button>
                     </CardContent>
                 </Card>
@@ -257,7 +296,7 @@ export default function DailyChallengePage() {
         )
     }
 
-    const currentQuestion = dailyChallenges[currentQuestionIndex];
+    const currentQuestion = questions[currentQuestionIndex];
 
     return (
         <div className="container mx-auto px-4 py-8">

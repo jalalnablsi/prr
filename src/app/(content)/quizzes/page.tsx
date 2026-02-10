@@ -1,16 +1,17 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { MOCK_DATA } from "@/lib/data";
 import type { Poll } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { QuestionTimer } from '@/components/question-timer';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth as useUser } from '@/context/auth-context';
+import { supabase } from '@/lib/supabaseClient';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw } from 'lucide-react';
+import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -33,7 +34,6 @@ const difficultyTranslations: Record<typeof difficultyLevels[number], string> = 
   hard: 'صعب'
 };
 
-// This component is self-contained for the quiz experience.
 function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect: boolean) => void }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -55,7 +55,8 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
     if (isAnswered) return;
     if (selectedOption) {
         setIsAnswered(true);
-        const isCorrect = selectedOption === item.correctOptionId;
+        const isCorrect = String(selectedOption) === String(item.correctOptionId);
+        
         if (isCorrect) {
           toast({
             title: "إجابة صحيحة!",
@@ -65,7 +66,7 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
           toast({
             variant: "destructive",
             title: "إجابة خاطئة",
-            description: "حظ أوفر في المرة القادمة. تم تظليل الإجابة الصحيحة.",
+            description: "حظ أوفر في المرة القادمة.",
           });
         }
         onAnswered(isCorrect);
@@ -90,14 +91,13 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
             )}
           </div>
           <CardDescription className="text-lg text-muted-foreground">
-            {isAnswered ? "تم تسجيل إجابتك. الإجابة الصحيحة مظللة." : "اختر الإجابة التي تعتقد أنها صحيحة."}
+            {isAnswered ? "تم تسجيل إجابتك." : "اختر الإجابة التي تعتقد أنها صحيحة."}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className={cn(
             "grid gap-4",
             hasImages ? "grid-cols-1 sm:grid-cols-2" : "space-y-2",
-            !hasImages && "grid-cols-1"
           )}>
             {item.options.map((option) => {
               const isSelected = option.id === selectedOption;
@@ -176,21 +176,67 @@ function QuizQuestion({ item, onAnswered }: { item: Poll, onAnswered: (isCorrect
 
 
 export default function QuizzesPage() {
-  const allQuizzes = useMemo(() => MOCK_DATA.filter(item => item.type === 'challenge' && item.difficulty), []);
-  const categories = useMemo(() => ['islamic', ...Array.from(new Set(allQuizzes.map(p => p.category))).filter(c => c !== 'islamic')], [allQuizzes]);
+  const { user, awardPoints } = useUser();
+  const { toast } = useToast();
 
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
+  const [filteredQuizzes, setFilteredQuizzes] = useState<Poll[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>('islamic');
   const [selectedDifficulty, setSelectedDifficulty] = useState<Poll['difficulty']>('easy');
   
   const [quizState, setQuizState] = useState<'not_started' | 'in_progress' | 'finished'>('not_started');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ questionId: string; isCorrect: boolean }[]>([]);
-  const { toast } = useToast();
 
-  const filteredQuizzes = useMemo(() => {
-      return allQuizzes.filter(quiz => quiz.category === selectedCategory && quiz.difficulty === selectedDifficulty);
-  }, [allQuizzes, selectedCategory, selectedDifficulty]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+        const { data, error } = await supabase
+            .from('content')
+            .select('category')
+            .eq('type', 'challenge');
 
+        if (error) {
+            console.error('Error fetching categories:', error);
+        } else if (data) {
+            const uniqueCats = Array.from(new Set(data.map(p => p.category as string)));
+            const sortedCats = ['islamic', ...uniqueCats.filter(c => c !== 'islamic')];
+            setAllCategories(sortedCats);
+        }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      if (!selectedCategory || !selectedDifficulty) return;
+      setLoading(true);
+      
+      const { data, error } = await supabase
+        .from('content')
+        .select('*')
+        .eq('type', 'challenge')
+        .eq('category', selectedCategory)
+        .eq('difficulty', selectedDifficulty);
+
+      if (error) {
+        console.error('Error fetching quizzes:', error);
+        toast({ variant: "destructive", title: "خطأ في جلب البيانات" });
+        setFilteredQuizzes([]);
+      } else {
+        const mappedData = data?.map(item => ({
+          ...item,
+          correctOptionId: item.correct_option_id,
+        })) || [];
+        setFilteredQuizzes(mappedData);
+      }
+      setLoading(false);
+    };
+
+    fetchQuizzes();
+  }, [selectedCategory, selectedDifficulty, toast]);
+  
   const startQuiz = () => {
       if (filteredQuizzes.length === 0) {
           toast({
@@ -205,8 +251,15 @@ export default function QuizzesPage() {
       setAnswers([]);
   };
 
-  const handleAnswer = (isCorrect: boolean) => {
+  const handleAnswer = async (isCorrect: boolean) => {
       setAnswers(prev => [...prev, { questionId: filteredQuizzes[currentQuestionIndex].id, isCorrect }]);
+      
+      if (isCorrect && user) {
+          await awardPoints(1, 'quiz_correct', { 
+            category: selectedCategory, 
+            difficulty: selectedDifficulty 
+          });
+      }
       
       setTimeout(() => {
           if (currentQuestionIndex < filteredQuizzes.length - 1) {
@@ -223,27 +276,15 @@ export default function QuizzesPage() {
       setAnswers([]);
   };
 
-  const totalScore = useMemo(() => answers.filter(a => a.isCorrect).length, [answers]);
+  const totalScore = answers.filter(a => a.isCorrect).length;
   const totalQuestions = filteredQuizzes.length;
-
-  const averageBeatPercentage = useMemo(() => {
-      if (answers.length === 0) return 0;
-      const correctAnswers = answers.filter(a => a.isCorrect);
-      if (correctAnswers.length === 0) return 0;
-
-      const answeredQuestionIds = correctAnswers.map(a => a.questionId);
-      const answeredQuestions = filteredQuizzes.filter(q => answeredQuestionIds.includes(q.id));
-      
-      const totalBeatPercentage = answeredQuestions.reduce((acc, q) => acc + (q.beatPercentage || 0), 0);
-      return Math.round(totalBeatPercentage / answeredQuestions.length);
-  }, [answers, filteredQuizzes]);
 
   if (quizState === 'not_started') {
       return (
           <div className="container mx-auto px-4 py-8">
               <div className="text-center mb-8">
                 <h1 className="text-3xl font-headline font-bold mb-2">الاختبارات المعرفية</h1>
-                <p className="text-muted-foreground text-lg">تحدى معلوماتك في مختلف المجالات والمستويات.</p>
+                <p className="text-muted-foreground text-lg">تحدى معلوماتك واجمع النقاط.</p>
               </div>
 
               <Card className="max-w-2xl mx-auto">
@@ -260,7 +301,7 @@ export default function QuizzesPage() {
                                     <SelectValue placeholder="اختر فئة" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categories.map(category => (
+                                    {allCategories.map(category => (
                                         <SelectItem key={category} value={category}>
                                             {categoryTranslations[category] || category}
                                         </SelectItem>
@@ -279,10 +320,18 @@ export default function QuizzesPage() {
                             </Tabs>
                         </div>
                       </div>
-                      <p className="text-center text-muted-foreground pt-4">
-                          {filteredQuizzes.length > 0 ? `تم العثور على ${filteredQuizzes.length} سؤال في هذا المستوى.` : 'لا توجد أسئلة بهذه المواصفات حالياً.'}
-                      </p>
-                      <Button size="lg" onClick={startQuiz} className="w-full" disabled={filteredQuizzes.length === 0}>
+                      
+                      {loading ? (
+                        <div className='text-center pt-4'>
+                            <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
+                        </div>
+                      ) : (
+                        <p className="text-center text-muted-foreground pt-4">
+                            {filteredQuizzes.length > 0 ? `تم العثور على ${filteredQuizzes.length} سؤال.` : 'لا توجد أسئلة بهذه المواصفات حالياً.'}
+                        </p>
+                      )}
+
+                      <Button size="lg" onClick={startQuiz} className="w-full" disabled={loading || filteredQuizzes.length === 0}>
                           ابدأ الاختبار
                       </Button>
                   </CardContent>
@@ -303,13 +352,15 @@ export default function QuizzesPage() {
                       </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                      <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg">
-                          <p className="text-lg font-semibold">أداء رائع!</p>
-                          <p className="text-muted-foreground">لقد تفوقت على {averageBeatPercentage}% من المشاركين في الأسئلة التي أجبت عليها بشكل صحيح.</p>
+                      <div className="bg-primary/10 border border-primary/20 p-4 rounded-lg space-y-2">
+                          <p className="text-lg font-semibold">مجموع نقاطك:</p>
+                          <div className="text-2xl font-bold text-primary">
+                              {user?.points || 0}
+                          </div>
                       </div>
-                      <Button size="lg" onClick={restartQuiz}>
+                      <Button size="lg" onClick={restartQuiz} className="w-full">
                          <RefreshCw className="ms-2 h-4 w-4" />
-                          إعادة الاختبار
+                          العودة لقائمة الاختبارات
                       </Button>
                   </CardContent>
               </Card>
@@ -317,12 +368,19 @@ export default function QuizzesPage() {
       )
   }
 
+  if (loading) {
+    return (
+        <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[60vh]">
+            <Loader2 className="animate-spin h-10 w-10 text-primary" />
+        </div>
+    );
+  }
+
   const currentQuestion = filteredQuizzes[currentQuestionIndex];
   if (!currentQuestion) {
-    // Should not happen if startQuiz is disabled correctly
     return (
         <div className="container mx-auto px-4 py-8 text-center">
-            <p>حدث خطأ ما. جارٍ العودة إلى صفحة الاختيار...</p>
+            <p>حدث خطأ ما. جارٍ العودة...</p>
             {setTimeout(() => restartQuiz(), 2000)}
         </div>
     );

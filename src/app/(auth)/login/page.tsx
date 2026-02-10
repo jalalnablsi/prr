@@ -1,46 +1,30 @@
+"use client";
 
-'use client';
-
-import { useAuth } from '@/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Icons } from '@/components/icons';
+import { useAuth } from '@/context/auth-context'; // استيراد useAuth
 
 export default function LoginPage() {
-  const { login } = useAuth();
   const router = useRouter();
+  const { refreshUser } = useAuth(); // استخدام دالة التحديث
 
-  const handleLogin = () => {
-    // Mock user as requested by the user.
-    const mockTelegramUser = {
-      id: 'user-moka-data',
-      name: 'موكا داتا',
-      avatarUrl: 'https://picsum.photos/seed/telegram/80/80',
-      isTelegramUser: true,
-    };
-    login(mockTelegramUser);
-    router.replace('/challenges'); // Redirect to challenges page as requested.
+  const handleLogin = async () => {
+    // بما أن الـ Context يقوم بتسجيل الدخول تلقائياً (Mock Mode)،
+    // يمكننا هنا مجرد إعادة تحميل البيانات أو التوجيه مباشرة.
+    
+    await refreshUser(); // تأكيد تحديث البيانات
+    router.replace('/challenges'); 
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
-      <Card className="max-w-md text-center">
-        <CardHeader>
-          <div className="flex justify-center mb-4">
-              <Icons.logo className="h-16 w-16" />
-          </div>
-          <CardTitle className="text-3xl font-headline font-bold mb-2">مختبر الدوبامين</CardTitle>
-          <CardDescription className="text-lg">
-              يجب عليك تسجيل الدخول عبر تيليجرام للمتابعة.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button size="lg" onClick={handleLogin} className="w-full">
-            تسجيل الدخول باستخدام تيليجرام
-          </Button>
-        </CardContent>
-      </Card>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold mb-4">تسجيل الدخول</h1>
+      <p className="text-muted-foreground mb-6 text-center">
+        اضغط على الزر أدناه للدخول كـ "مطور تطبيق" (وضع التجربة).
+      </p>
+      <Button onClick={handleLogin} size="lg">
+        دخول (Dev Mode)
+      </Button>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+// تأكد من تثبيت المكتبة: npm install @twa-dev/sdk
 import WebApp from '@twa-dev/sdk'; 
 import { authenticateUser } from '@/app/actions/auth'; 
 import { addPointsToUser } from '@/app/actions/points'; 
@@ -13,56 +14,51 @@ interface User {
   points: number;
   username?: string;
   photo_url?: string;
-  last_daily_challenge_at?: string | null;
 }
 
-interface AuthContextType {
+interface UserContextType {
   user: User | null;
   isLoading: boolean;
   refreshUser: () => Promise<void>;
   awardPoints: (amount: number, reason: string, meta?: any) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// نستخدم نفس اسم التصدير الموجود في Layout لديك
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function UserProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // داخل الملف src/context/auth-context.tsx
-
   const refreshUser = async () => {
     try {
-      let userPayload: any;
+      let userDataToSend: any;
+      let isDev = false;
 
-      // === 1. محاولة جلب بيانات تيلجرام ===
-      let tgUser = null;
+      // === التحقق: هل نحن داخل تيلجرام؟ ===
       if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
         WebApp.ready();
-        tgUser = WebApp.initDataUnsafe.user;
-      }
-
-      // === 2. تحديد البيانات التي سترسل ===
-      if (tgUser && tgUser.id) {
-        // وضع تيلجرام الحقيقي
-        userPayload = tgUser;
+        const tgUser = WebApp.initDataUnsafe.user;
+        
+        if (tgUser) {
+          userDataToSend = tgUser;
+          isDev = false;
+        } else {
+          throw new Error("No user in Telegram");
+        }
       } else {
-        // وضع التطوير أو عدم وجود مستخدم
+        // === وضع التطوير (المتصفح العادي) ===
         console.log("Running in Dev Mode (Browser) - Using Mock User");
-        userPayload = {
-          id: 999888777,
-          first_name: "موكا داتا",
+        userDataToSend = {
+          id: 999888777, // ID وهمي ثابت
+          first_name: "مطور التطبيق",
           username: "dev_admin",
           photo_url: "https://picsum.photos/seed/dev/200/200"
         };
+        isDev = true;
       }
 
-      // في هذه المرحلة، نحن متأكدون 100% أن userPayload ليس undefined
-      
-      // === 3. إرسال البيانات للسيرفر ===
-      // نمرر true دائماً للآن لأننا في طور التطوير
-      const dbUser = await authenticateUser(userPayload, true);
+      // إرسال البيانات للسيرفر
+      const dbUser = await authenticateUser(JSON.stringify(userDataToSend), isDev);
       setUser(dbUser as User);
 
     } catch (error) {
@@ -71,8 +67,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     refreshUser();
@@ -95,15 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, refreshUser, awardPoints }}>
+    <UserContext.Provider value={{ user, isLoading, refreshUser, awardPoints }}>
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-// تصدير الـ Hook للاستخدام في المكونات الأخرى
-export const useAuth = () => { // يمكنك استخدام useAuth أو useUser حسب تفضيلك
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within a AuthProvider");
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) throw new Error("useUser must be used within a UserProvider");
   return context;
 };
