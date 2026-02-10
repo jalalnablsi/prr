@@ -7,7 +7,7 @@ import { PollCard } from "@/components/poll-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Loader2 } from "lucide-react";
-import { useAuth } from '@/context/auth-context'; // جلب بيانات المستخدم
+import { useAuth } from '@/context/auth-context';
 
 const categoryTranslations: Record<string, string> = {
   sports: 'رياضة',
@@ -21,12 +21,10 @@ const categoryTranslations: Record<string, string> = {
 };
 
 export default function PollsPage() {
-  const { user } = useAuth(); // نحتاج معرف المستخدم
+  const { user } = useAuth();
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [isClient, setIsClient] = useState(false);
-  
-  // خريطة لتخزين: { poll_id: option_id }
   const [userVotesMap, setUserVotesMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -34,7 +32,6 @@ export default function PollsPage() {
     const fetchData = async () => {
       setLoading(true);
 
-      // 1. جلب الاستطلاعات
       const { data: pollsData, error: pollsError } = await supabase
         .from('content')
         .select('*')
@@ -43,11 +40,11 @@ export default function PollsPage() {
 
       if (pollsError) {
         console.error('Error fetching polls:', pollsError);
-      } else if (pollsData) {
+        setPolls([]);
+      } else {
         setPolls(pollsData as Poll[]);
       }
 
-      // 2. جلب أصوات المستخدم الحالي (إذا كان مسجلاً)
       if (user) {
         const { data: votesData, error: votesError } = await supabase
           .from('user_votes')
@@ -55,12 +52,13 @@ export default function PollsPage() {
           .eq('user_id', user.id);
         
         if (votesData && !votesError) {
-          // تحويل البيانات إلى كائن للوصول السريع
           const map: Record<string, string> = {};
           votesData.forEach(v => {
             map[v.content_id] = v.option_id;
           });
           setUserVotesMap(map);
+        } else {
+          setUserVotesMap({});
         }
       }
 
@@ -69,6 +67,10 @@ export default function PollsPage() {
 
     fetchData();
   }, [user]);
+
+  const handleVoteSuccess = (pollId: string, optionId: string) => {
+    setUserVotesMap(prev => ({ ...prev, [pollId]: optionId }));
+  };
 
   const categories = useMemo(() => {
     if (loading || polls.length === 0) return ['general'];
@@ -112,11 +114,11 @@ export default function PollsPage() {
               {filteredItems.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredItems.map(item => (
-                    // تمرير الـ prop الجديد
                     <PollCard 
                       key={item.id} 
                       item={item} 
-                      votedOptionId={userVotesMap[item.id]} 
+                      votedOptionId={userVotesMap[item.id]}
+                      onVote={handleVoteSuccess}
                     />
                   ))}
                 </div>

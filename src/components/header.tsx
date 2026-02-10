@@ -25,11 +25,9 @@ export function Header() {
         
         {user ? (
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm font-medium">
-                <div className="flex items-center gap-1.5 rounded-full bg-amber-400/10 border border-amber-400/20 px-3 py-1.5 text-amber-400 font-bold">
-                    <Coins className="h-4 w-4" />
-                    <span>{user.points?.toLocaleString() || 0}</span>
-                </div>
+            <div className="flex items-center gap-2 rounded-full bg-primary/10 border border-primary/20 px-3 py-1.5 text-primary font-bold">
+              <Coins className="h-5 w-5" />
+              <span className="text-sm">{user.points?.toLocaleString() || 0}</span>
             </div>
 
             <div className="flex items-center gap-3">

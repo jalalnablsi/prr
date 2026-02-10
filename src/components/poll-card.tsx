@@ -35,26 +35,29 @@ const difficultyTranslations: Record<Exclude<Poll['difficulty'], undefined>, str
 interface PollCardProps {
   item: Poll;
   votedOptionId?: string;
+  onVote: (pollId: string, optionId: string) => void;
 }
 
-export function PollCard({ item: initialItem, votedOptionId }: PollCardProps) {
+export function PollCard({ item: initialItem, votedOptionId, onVote }: PollCardProps) {
   const router = useRouter();
   const { user } = useAuth();
   const { toast } = useToast();
 
   const [item, setItem] = useState(initialItem);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(!!votedOptionId);
   const [isVoting, setIsVoting] = useState(false);
 
   const isQuiz = item.correctOptionId != null;
 
   useEffect(() => {
+    // Update internal state if the prop changes
+    setIsAnswered(!!votedOptionId);
     if (votedOptionId) {
       setSelectedOption(votedOptionId);
-      setIsAnswered(true);
     }
   }, [votedOptionId]);
+
 
   const totalVotes = useMemo(() => {
     return item.options.reduce((sum, option) => sum + (option.votes || 0), 0);
@@ -98,6 +101,7 @@ export function PollCard({ item: initialItem, votedOptionId }: PollCardProps) {
       } else {
         toast({ title: "تم تسجيل صوتك!" });
       }
+      onVote(item.id, selectedOption); // Notify parent on success
     }
     setIsVoting(false);
   };
@@ -121,7 +125,6 @@ export function PollCard({ item: initialItem, votedOptionId }: PollCardProps) {
   };
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Check if the click target or its parent is a button or a link to prevent navigation
     const target = e.target as HTMLElement;
     if (target.closest('button') || target.closest('a')) {
       return;
@@ -162,8 +165,11 @@ export function PollCard({ item: initialItem, votedOptionId }: PollCardProps) {
                  )}>
                     {item.options.map((option) => {
                       const currentVotes = option.votes || 0;
-                      const displayTotalVotes = totalVotes === 0 && currentVotes === 0 ? 1 : totalVotes; // Avoid division by zero
-                      const percentage = (currentVotes / displayTotalVotes) * 100;
+                      // Avoid division by zero, and ensure percentage is correct after optimistic update
+                      const displayTotalVotes = isAnswered 
+                        ? item.options.reduce((sum, opt) => sum + (opt.votes || 0), 0)
+                        : totalVotes;
+                      const percentage = displayTotalVotes > 0 ? (currentVotes / displayTotalVotes) * 100 : 0;
 
                       const isSelected = option.id === selectedOption;
                       const isCorrectOption = option.id === item.correctOptionId;

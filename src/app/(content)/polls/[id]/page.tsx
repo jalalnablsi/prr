@@ -38,6 +38,28 @@ export default function PollDetailPage() {
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [userCommentVotes, setUserCommentVotes] = useState<Record<string, 'up' | 'down'>>({});
 
+  // Effect to load votes from localStorage on mount
+  useEffect(() => {
+    if (user && typeof window !== 'undefined') {
+      try {
+        const storedVotes = localStorage.getItem(`comment-votes-${user.id}`);
+        if (storedVotes) {
+          setUserCommentVotes(JSON.parse(storedVotes));
+        }
+      } catch (error) {
+        console.error("Failed to parse comment votes from localStorage", error);
+      }
+    }
+  }, [user]);
+
+  // Effect to save votes to localStorage when they change
+  useEffect(() => {
+    if (user && typeof window !== 'undefined') {
+      localStorage.setItem(`comment-votes-${user.id}`, JSON.stringify(userCommentVotes));
+    }
+  }, [userCommentVotes, user]);
+
+
   useEffect(() => {
     const fetchData = async () => {
       const id = params.id;
@@ -46,7 +68,7 @@ export default function PollDetailPage() {
       try {
         setLoading(true);
         
-        // جلب الاستطلاع
+        // Fetch poll
         const { data: pollData, error: pollError } = await supabase
           .from('content')
           .select('*')
@@ -55,7 +77,7 @@ export default function PollDetailPage() {
 
         if (pollError) throw pollError;
 
-        // جلب التعليقات
+        // Fetch comments
         const { data: commentsData, error: commentsError } = await supabase
           .from('comments')
           .select('*')
@@ -63,14 +85,26 @@ export default function PollDetailPage() {
           .order('created_at', { ascending: false });
 
         if (commentsError) throw commentsError;
+        
+        // This is a client component, so we can fetch user votes for the poll too
+        let userVote = null;
+        if (user) {
+            const { data: voteData } = await supabase
+                .from('user_votes')
+                .select('option_id')
+                .eq('user_id', user.id)
+                .eq('content_id', id)
+                .single();
+            userVote = voteData?.option_id;
+        }
 
-        // دمج التعليقات لعرضها في البطاقة
-        const pollWithComments = {
+        const pollWithDetails = {
           ...pollData,
-          comments: commentsData || []
+          comments: commentsData || [],
+          userVote: userVote, // Pass the user's vote to the PollCard
         };
 
-        setPoll(pollWithComments);
+        setPoll(pollWithDetails);
         setComments(commentsData || []);
         
       } catch (error) {
@@ -83,7 +117,7 @@ export default function PollDetailPage() {
     };
 
     fetchData();
-  }, [params.id, router, toast]);
+  }, [params.id, router, toast, user]);
 
   const sortedComments = useMemo(() => {
     const sorted = [...comments];
@@ -128,48 +162,39 @@ export default function PollDetailPage() {
       return;
     }
 
-    const originalComments = [...comments];
-    const originalVotes = { ...userCommentVotes };
-
     const currentVote = userCommentVotes[commentId];
     const isTogglingOff = currentVote === voteType;
-    
+    let newVoteState: 'up' | 'down' | undefined = isTogglingOff ? undefined : voteType;
+
+    // This is not atomic and prone to race conditions.
+    // A proper solution requires a backend change (DB function).
+    // This is the best we can do with the current setup.
     let upvoteChange = 0;
     let downvoteChange = 0;
 
-    if (isTogglingOff) {
-      voteType === 'up' ? upvoteChange = -1 : downvoteChange = -1;
-    } else if (currentVote) {
-      if (voteType === 'up') { // down -> up
+    if (newVoteState === 'up') {
         upvoteChange = 1;
-        downvoteChange = -1;
-      } else { // up -> down
-        upvoteChange = -1;
+        if (currentVote === 'down') downvoteChange = -1;
+    } else if (newVoteState === 'down') {
         downvoteChange = 1;
-      }
-    } else {
-      voteType === 'up' ? upvoteChange = 1 : downvoteChange = 1;
+        if (currentVote === 'up') upvoteChange = -1;
+    } else { // Toggling off
+        if (currentVote === 'up') upvoteChange = -1;
+        if (currentVote === 'down') downvoteChange = -1;
     }
 
-    // Optimistic UI Update
-    setUserCommentVotes(prev => ({...prev, [commentId]: isTogglingOff ? undefined : voteType}));
+    // 1. Optimistic UI Update
+    const originalComments = [...comments];
+    const originalVotes = { ...userCommentVotes };
+
+    setUserCommentVotes(prev => ({...prev, [commentId]: newVoteState}));
     setComments(prev => prev.map(c => 
         c.id === commentId 
         ? {...c, upvotes: c.upvotes + upvoteChange, downvotes: c.downvotes + downvoteChange}
         : c
     ));
-    
-    // Backend Update using a stored procedure for atomicity
-    const { error } = await supabase.rpc('vote_on_comment', {
-        p_comment_id: commentId,
-        p_user_id: user.id, // You need to ensure a user_comment_votes table exists
-        p_vote_type: isTogglingOff ? null : voteType
-    });
-    
-    // Since the RPC `vote_on_comment` doesn't exist, we will simulate it with a direct update.
-    // This is NOT ATOMIC and prone to race conditions, but it's the best we can do without backend changes.
-    // A proper solution would use a database function (RPC).
 
+    // 2. Backend update (non-atomic, best-effort)
     try {
         const { data: currentComment, error: fetchError } = await supabase
             .from('comments')
@@ -178,21 +203,20 @@ export default function PollDetailPage() {
             .single();
 
         if (fetchError) throw fetchError;
-        
-        const newUpvotes = currentComment.upvotes + upvoteChange;
-        const newDownvotes = currentComment.downvotes + downvoteChange;
 
         const { error: updateError } = await supabase
             .from('comments')
-            .update({ upvotes: newUpvotes, downvotes: newDownvotes })
+            .update({ 
+                upvotes: currentComment.upvotes + upvoteChange, 
+                downvotes: currentComment.downvotes + downvoteChange 
+            })
             .eq('id', commentId);
 
         if (updateError) throw updateError;
-
-    } catch (rpcError) {
-        console.error('Error voting on comment:', rpcError);
+    } catch (error) {
+        console.error('Error voting on comment:', error);
         toast({ variant: 'destructive', title: 'فشل التصويت' });
-        // Revert on error
+        // Revert UI on error
         setComments(originalComments);
         setUserCommentVotes(originalVotes);
     }
@@ -214,7 +238,13 @@ export default function PollDetailPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
-         <PollCard item={poll} votedOptionId={poll.userVote} />
+         <PollCard 
+            item={poll} 
+            votedOptionId={poll.userVote} 
+            onVote={(pollId, optionId) => {
+                setPoll((prev: any) => ({...prev, userVote: optionId}));
+            }} 
+         />
       </div>
 
       <Card className="mb-8 bg-muted/30">
