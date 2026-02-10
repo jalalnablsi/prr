@@ -8,11 +8,10 @@ import { PollCard } from "@/components/poll-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-// ... (باقي الترجمات كما هي)
-
 export default function PollsPage() {
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isClient, setIsClient] = useState(false);
   const categoryTranslations: Record<string, string> = {
     sports: 'رياضة',
     games: 'ألعاب',
@@ -25,6 +24,7 @@ export default function PollsPage() {
   };
   
   useEffect(() => {
+    setIsClient(true);
     const fetchPolls = async () => {
       // جلب البيانات حيث النوع هو 'poll'
       const { data, error } = await supabase
@@ -47,9 +47,13 @@ export default function PollsPage() {
   const categories = useMemo(() => {
     if (loading || polls.length === 0) return ['general'];
     const uniqueCats = Array.from(new Set(polls.map(p => p.category)));
-    // نفس منطق ترتيب الفئات السابق...
-    return ['general', ...uniqueCats.filter(c => c !== 'general' && c !== 'islamic')];
+    return ['general', ...uniqueCats.filter(c => c !== 'general')];
   }, [polls, loading]);
+
+  const shuffledPolls = useMemo(() => {
+    if (!isClient) return polls;
+    return [...polls].sort(() => Math.random() - 0.5);
+  }, [polls, isClient]);
 
   if (loading) return <div className="p-8 text-center">جاري التحميل...</div>;
 
@@ -71,7 +75,9 @@ export default function PollsPage() {
           <ScrollBar orientation="horizontal" className="invisible" />
         </ScrollArea>
         {categories.map(category => {
-          const filteredItems = polls.filter(item => item.category === category);
+          const filteredItems = category === 'general' 
+            ? shuffledPolls 
+            : polls.filter(item => item.category === category);
           return (
             <TabsContent key={category} value={category}>
               {filteredItems.length > 0 ? (
