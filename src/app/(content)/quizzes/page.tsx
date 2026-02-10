@@ -229,7 +229,10 @@ export default function QuizzesPage() {
           ...item,
           correctOptionId: item.correct_option_id,
         })) || [];
-        setFilteredQuizzes(mappedData);
+        
+        // Shuffle the array and take the first 10 questions
+        const shuffled = [...mappedData].sort(() => 0.5 - Math.random());
+        setFilteredQuizzes(shuffled.slice(0, 10));
       }
       setLoading(false);
     };
@@ -326,9 +329,13 @@ export default function QuizzesPage() {
                             <Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" />
                         </div>
                       ) : (
-                        <p className="text-center text-muted-foreground pt-4">
-                            {filteredQuizzes.length > 0 ? `تم العثور على ${filteredQuizzes.length} سؤال.` : 'لا توجد أسئلة بهذه المواصفات حالياً.'}
-                        </p>
+                        <>
+                          {filteredQuizzes.length === 0 && (
+                             <p className="text-center text-muted-foreground pt-4">
+                              {'لا توجد أسئلة بهذه المواصفات حالياً.'}
+                            </p>
+                          )}
+                        </>
                       )}
 
                       <Button size="lg" onClick={startQuiz} className="w-full" disabled={loading || filteredQuizzes.length === 0}>
