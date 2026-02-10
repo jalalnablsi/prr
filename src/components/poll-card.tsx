@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -9,9 +10,12 @@ import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Users, BrainCircuit, CheckCircle, XCircle } from "lucide-react";
 import { useToast } from '@/hooks/use-toast';
-import type { Poll, PollOption } from "@/lib/types";
+import type { Poll } from "@/lib/types";
 import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabaseClient';
+import { useAuth } from '@/context/auth-context';
 
+// --- الترجمات والثوابت ---
 const categoryTranslations: Record<Poll['category'], string> = {
   sports: 'رياضة',
   games: 'ألعاب',
@@ -27,50 +31,94 @@ const difficultyTranslations: Record<Exclude<Poll['difficulty'], undefined>, str
   easy: 'سهل',
   medium: 'متوسط',
   hard: 'صعب'
-}
+};
 
+// --- المكون الرئيسي ---
 export function PollCard({ item: initialItem }: { item: Poll }) {
+  const { user } = useAuth();
   const [item, setItem] = useState(initialItem);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
   const { toast } = useToast();
 
   const isQuiz = item.correctOptionId != null;
 
   const totalVotes = useMemo(() => {
     let initialVotes = item.options.reduce((sum, option) => sum + option.votes, 0);
-    // Add 1 for the user's upcoming vote, but only if it's a new vote
     if (selectedOption && !isAnswered) {
         return initialVotes + 1;
     }
     return initialVotes;
   }, [item.options, selectedOption, isAnswered]);
 
-
-  const handleVote = () => {
+  const handleVote = async () => {
     if (!selectedOption) return;
+    
+    if (!user) {
+        toast({
+            variant: "destructive",
+            title: "مستخدم غير مسجل",
+            description: "يجب عليك تسجيل الدخول للمشاركة.",
+        });
+        return;
+    }
 
+    setIsVoting(true);
+
+    const optimisticItem = {
+      ...item,
+      options: item.options.map(opt => 
+        opt.id === selectedOption ? { ...opt, votes: opt.votes + 1 } : opt
+      )
+    };
+    
+    setItem(optimisticItem);
     setIsAnswered(true);
 
-    // Optimistically update the vote count on the client
-    setItem(currentItem => {
-      const newOptions = currentItem.options.map(opt => 
-        opt.id === selectedOption ? { ...opt, votes: opt.votes + 1 } : opt
-      );
-      return {...currentItem, options: newOptions};
+    const { error } = await supabase.rpc('cast_vote', {
+      p_content_id: item.id,
+      p_option_id: selectedOption,
+      p_user_id: user.id
     });
 
-    const isCorrect = selectedOption === item.correctOptionId;
+    if (error) {
+      console.error("Vote error:", error);
+      
+      setItem(initialItem); 
+      setIsAnswered(false);
 
-    if (isQuiz) {
-      if (isCorrect) {
-        toast({ title: "إجابة صحيحة!", description: "أحسنت!" });
+      if (error.message.includes('USER_ALREADY_VOTED')) {
+        toast({ 
+          variant: "destructive", 
+          title: "لقد قمت بالتصويت مسبقاً", 
+          description: "لا يمكن التصويت أكثر من مرة لنفس المحتوى." 
+        });
+        // We still want to show the results even if they voted before
+        setIsAnswered(true);
+        setItem(initialItem); // Revert to original votes count
       } else {
-        toast({ variant: "destructive", title: "إجابة خاطئة", description: "حظ أوفر في المرة القادمة." });
+        toast({ 
+          variant: "destructive", 
+          title: "حدث خطأ", 
+          description: "لم يتم تسجيل صوتك، يرجى المحاولة مرة أخرى." 
+        });
       }
     } else {
+      const isCorrect = selectedOption === item.correctOptionId;
+
+      if (isQuiz) {
+        if (isCorrect) {
+          toast({ title: "إجابة صحيحة!", description: "أحسنت!" });
+        } else {
+          toast({ variant: "destructive", title: "إجابة خاطئة", description: "حظ أوفر في المرة القادمة." });
+        }
+      } else {
         toast({ title: "تم التصويت بنجاح!", description: "شكرًا لمشاركتك." });
+      }
     }
+    
+    setIsVoting(false);
   };
 
   const hasImages = item.options.some(opt => opt.imageUrl);
@@ -113,6 +161,7 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
             {isQuiz ? "اختر الإجابة الصحيحة." : "شارك بصوتك في هذا الاستطلاع."}
           </CardDescription>
         </CardHeader>
+
         <CardContent className="pb-4">
              <div className={cn(
                 "grid gap-3",
@@ -126,6 +175,7 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
                   if (isAnswered) {
                      const isUserChoice = isSelected;
                      const isWrongChoice = isUserChoice && !isCorrectOption;
+                     
                     return (
                         <div key={option.id} className={cn(
                             "p-3 rounded-lg border-2 transition-all text-sm",
@@ -165,7 +215,7 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
                     return (
                         <div 
                         key={option.id} 
-                        onClick={() => !isAnswered && setSelectedOption(option.id)}
+                        onClick={() => !isAnswered && !isVoting && setSelectedOption(option.id)}
                         className={cn(
                           "rounded-lg border-2 bg-card/50 overflow-hidden cursor-pointer transition-all",
                           isSelected ? "border-primary shadow-md" : "border-border hover:border-primary/50",
@@ -187,20 +237,22 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
                         key={option.id}
                         variant={isSelected ? 'default' : 'secondary'}
                         className="w-full justify-start h-auto py-2.5 px-4 text-left text-sm"
-                        onClick={() => !isAnswered && setSelectedOption(option.id)}
-                        disabled={isAnswered}
+                        onClick={() => !isAnswered && !isVoting && setSelectedOption(option.id)}
+                        disabled={isAnswered || isVoting}
                     >
                         {option.text}
                     </Button>
                    )
                 })}
              </div>
+
              {!isAnswered && (
-                <Button onClick={handleVote} disabled={!selectedOption} className='w-full mt-4'>
-                    {isQuiz ? 'تأكيد الإجابة' : 'تصويت'}
+                <Button onClick={handleVote} disabled={!selectedOption || isVoting} className='w-full mt-4'>
+                    {isVoting ? 'جاري التسجيل...' : (isQuiz ? 'تأكيد الإجابة' : 'تصويت')}
                 </Button>
              )}
         </CardContent>
+
         <CardFooter className="mt-auto flex items-center justify-between text-sm text-muted-foreground pt-4 border-t">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4" />
@@ -208,7 +260,7 @@ export function PollCard({ item: initialItem }: { item: Poll }) {
           </div>
           <Link href={`/polls/${item.id}`} className="flex items-center gap-2 hover:text-foreground">
             <MessageSquare className="h-4 w-4" />
-            <span>{item.comments.length} تعليق</span>
+            <span>{item.comments?.length || 0} تعليق</span>
           </Link>
         </CardFooter>
       </Card>

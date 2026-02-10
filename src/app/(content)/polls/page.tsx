@@ -1,25 +1,58 @@
+// PollsPage.tsx
 'use client';
 
-import { MOCK_DATA } from "@/lib/data";
+import { useState, useEffect, useMemo } from 'react';
+import { supabase } from '@/lib/supabaseClient'; // استيراد العميل
+import type { Poll } from '@/lib/types'; // تأكد أن نوع Poll يطابق بيانات قاعدة البيانات
 import { PollCard } from "@/components/poll-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Poll } from '@/lib/types';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
-const categoryTranslations: Record<string, string> = {
-  sports: 'رياضة',
-  games: 'ألعاب',
-  math: 'رياضيات',
-  puzzles: 'ألغاز',
-  islamic: 'إسلامية',
-  tech: 'تقنية',
-  general: 'عام',
-  science: 'علوم',
-};
+// ... (باقي الترجمات كما هي)
 
 export default function PollsPage() {
-  const polls = MOCK_DATA.filter(item => item.type === 'poll');
-  const categories = ['general', ...Array.from(new Set(polls.map(p => p.category))).filter(c => c !== 'general' && c !== 'islamic')];
+  const [polls, setPolls] = useState<Poll[]>([]);
+  const [loading, setLoading] = useState(true);
+  const categoryTranslations: Record<string, string> = {
+    sports: 'رياضة',
+    games: 'ألعاب',
+    math: 'رياضيات',
+    puzzles: 'ألغاز',
+    islamic: 'إسلامية',
+    tech: 'تقنية',
+    general: 'عام',
+    science: 'علوم',
+  };
+  
+  useEffect(() => {
+    const fetchPolls = async () => {
+      // جلب البيانات حيث النوع هو 'poll'
+      const { data, error } = await supabase
+        .from('content')
+        .select('*')
+        .eq('type', 'poll')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching polls:', error);
+      } else if (data) {
+        setPolls(data as Poll[]);
+      }
+      setLoading(false);
+    };
+
+    fetchPolls();
+  }, []);
+
+  const categories = useMemo(() => {
+    if (loading || polls.length === 0) return ['general'];
+    const uniqueCats = Array.from(new Set(polls.map(p => p.category)));
+    // نفس منطق ترتيب الفئات السابق...
+    return ['general', ...uniqueCats.filter(c => c !== 'general' && c !== 'islamic')];
+  }, [polls, loading]);
+
+  if (loading) return <div className="p-8 text-center">جاري التحميل...</div>;
+
 
   return (
     <div className="container mx-auto px-4 py-8">

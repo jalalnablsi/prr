@@ -68,7 +68,7 @@ export default function StrangerGamePage() {
                             </Label>
                             <Slider
                                 id="players"
-                                min={4}
+                                min={3}
                                 max={10}
                                 step={1}
                                 value={[numPlayers]}

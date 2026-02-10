@@ -3,6 +3,7 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { supabase } from '@/lib/supabaseClient';
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -88,16 +89,44 @@ export default function AdminPage() {
   const watchType = form.watch("type");
   const watchOptions = form.watch("options");
 
-  const onSubmit = (data: ContentFormValues) => {
-    // In a real app, this would send data to the backend.
-    console.log("Form Data:", data);
-    toast({
-      title: "تم إنشاء المحتوى بنجاح!",
-      description: "تمت إضافة السؤال أو الاستطلاع الجديد إلى النظام.",
-    });
-    form.reset();
+  const onSubmit = async (data: ContentFormValues) => {
+    // تحويل الخيارات إلى تنسيق مع id
+    const optionsWithIds = data.options.map((opt, i) => ({
+      id: `${i + 1}`,
+      text: opt.text,
+      imageUrl: opt.imageUrl || null,
+    }));
+  
+    // إعداد بيانات الإدخال
+    const insertData = {
+      type: data.type,
+      category: data.category,
+      question: data.question,
+      options: optionsWithIds,
+      correct_option_id: data.correctOptionId || null,
+      difficulty: data.difficulty || null,
+      // timeframe: data.type === 'prediction' ? 'week' : null, // يمكنك إضافته لاحقاً
+    };
+  
+    console.log('Sending to Supabase:', insertData); // للتحقق
+  
+    const { error } = await supabase.from('content').insert(insertData);
+  
+    if (error) {
+      console.error('Supabase error:', error);
+      toast({
+        title: "فشل الحفظ",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "تم الحفظ!",
+        description: "تم إنشاء المحتوى بنجاح.",
+      });
+      form.reset();
+    }
   };
-
   return (
     <div className="container mx-auto px-4 py-12" dir="rtl">
       <div className="max-w-4xl mx-auto">

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo, useTransition } from 'react';
@@ -12,8 +13,10 @@ import { getTopComment } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from './ui/skeleton';
 import { Badge } from './ui/badge';
+import { useAuth } from '@/context/auth-context';
 
 export function CommentSection({ comments: initialComments, contentId, contentType }: { comments: CommentType[], contentId: string, contentType: Poll['type'] }) {
+  const { user } = useAuth();
   const [comments, setComments] = useState(initialComments);
   const [sortBy, setSortBy] = useState<'top' | 'newest'>('top');
   const [newComment, setNewComment] = useState('');
@@ -49,10 +52,10 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
   }, [sortedComments, pinnedCommentId]);
 
   const handlePostComment = () => {
-    if (newComment.trim()) {
+    if (newComment.trim() && user) {
       const comment: CommentType = {
         id: `c-new-${Date.now()}`,
-        author: { name: 'أنت', avatarUrl: 'https://picsum.photos/seed/200/40/40' },
+        author: { name: user.name, avatarUrl: user.avatarUrl },
         text: newComment,
         upvotes: 0,
         downvotes: 0,
@@ -87,8 +90,8 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
         <div className="space-y-4">
           <div className="flex gap-4">
             <Avatar>
-              <AvatarImage src="https://picsum.photos/seed/200/40/40" />
-              <AvatarFallback>أ</AvatarFallback>
+              <AvatarImage src={user?.avatarUrl} />
+              <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="w-full space-y-2">
               <Textarea
@@ -97,7 +100,7 @@ export function CommentSection({ comments: initialComments, contentId, contentTy
                 onChange={(e) => setNewComment(e.target.value)}
                 className="bg-input"
               />
-              <Button onClick={handlePostComment} size="sm" disabled={!newComment.trim()}>نشر التعليق</Button>
+              <Button onClick={handlePostComment} size="sm" disabled={!newComment.trim() || !user}>نشر التعليق</Button>
             </div>
           </div>
           <div className="space-y-6 pt-6">
