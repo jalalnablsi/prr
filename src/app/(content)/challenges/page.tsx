@@ -12,7 +12,7 @@ import { useAuth as useUser } from '@/context/auth-context';
 import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle, Trophy, BrainCircuit, RefreshCw, Loader2, CalendarX } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { getRandomChallenges, getUserGlobalStats, completeDailyChallenge } from '@/app/actions/challenge';
 import WebApp from '@twa-dev/sdk';
 
