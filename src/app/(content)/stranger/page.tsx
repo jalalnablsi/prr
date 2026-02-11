@@ -13,7 +13,7 @@ const gameTopics = PlaceHolderImages.filter(img => img.imageHint === 'stranger_g
 
 function AdBanner({ className }: { className?: string }) {
   return (
-    <div className={cn("w-full max-w-lg mx-auto mt-4 p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
+    <div className={cn("w-full max-w-lg mx-auto p-4 rounded-lg bg-muted/50 border-2 border-dashed border-border text-center", className)}>
       <p className="font-bold text-primary">محاكاة إعلان بانر</p>
       <p className="text-sm text-muted-foreground">سيظهر إعلان البانر هنا في النسخة النهائية.</p>
     </div>
@@ -96,7 +96,7 @@ export default function StrangerGamePage() {
     if (gameState === 'reveal') {
         const isCurrentPlayerStranger = currentPlayer === stranger;
         return (
-            <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[70vh]">
+            <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[70vh] gap-8">
                 <Card className="max-w-md w-full text-center">
                     <CardHeader>
                         <CardTitle className="text-3xl font-headline">دور اللاعب رقم {currentPlayer}</CardTitle>
@@ -134,13 +134,14 @@ export default function StrangerGamePage() {
                         )}
                     </CardContent>
                 </Card>
+                <AdBanner />
             </div>
         );
     }
 
     if (gameState === 'discuss') {
         return (
-             <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[70vh]">
+             <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[70vh] gap-8">
                 <Card className="max-w-md w-full text-center">
                     <CardHeader>
                         <CardTitle className="text-3xl font-headline">ابدأوا النقاش!</CardTitle>
@@ -154,13 +155,14 @@ export default function StrangerGamePage() {
                         </Button>
                     </CardContent>
                 </Card>
+                <AdBanner />
             </div>
         )
     }
     
     if (gameState === 'end') {
          return (
-             <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-[70vh]">
+             <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[70vh] gap-8">
                 <Card className="max-w-md w-full text-center">
                     <CardHeader>
                         <CardTitle className="text-3xl font-headline">انتهت اللعبة!</CardTitle>
@@ -179,9 +181,9 @@ export default function StrangerGamePage() {
                             <RefreshCw className="ms-2" />
                             العب مرة أخرى
                         </Button>
-                        <AdBanner />
                     </CardContent>
                 </Card>
+                <AdBanner />
             </div>
         )
     }

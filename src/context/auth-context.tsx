@@ -30,49 +30,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // داخل الملف src/context/auth-context.tsx
-
   const refreshUser = async () => {
+    setIsLoading(true);
     try {
-      let userPayload: any;
+      let userPayload: any = null;
 
-      // === 1. محاولة جلب بيانات تيلجرام ===
-      let tgUser = null;
-      if (typeof window !== 'undefined' && window.Telegram && window.Telegram.WebApp) {
-        WebApp.ready();
-        tgUser = WebApp.initDataUnsafe.user;
+      // This logic must only run on the client
+      if (typeof window !== 'undefined') {
+        const tgUser = WebApp.initDataUnsafe.user;
+        if (tgUser && tgUser.id) {
+          WebApp.ready();
+          userPayload = tgUser;
+        }
       }
-
-      // === 2. تحديد البيانات التي سترسل ===
-      if (tgUser && tgUser.id) {
-        // وضع تيلجرام الحقيقي
-        userPayload = tgUser;
-      } else {
-        // وضع التطوير أو عدم وجود مستخدم
-        console.log("Running in Dev Mode (Browser) - Using Mock User");
-        userPayload = {
-          id: 999888777,
-          first_name: "موكا داتا",
-          username: "dev_admin",
-          photo_url: "https://picsum.photos/seed/dev/200/200"
-        };
-      }
-
-      // في هذه المرحلة، نحن متأكدون 100% أن userPayload ليس undefined
       
-      // === 3. إرسال البيانات للسيرفر ===
-      // نمرر true دائماً للآن لأننا في طور التطوير
-      const dbUser = await authenticateUser(userPayload, true);
-      setUser(dbUser as User);
-
+      if (userPayload) {
+        const dbUser = await authenticateUser(userPayload, false);
+        setUser(dbUser as User);
+      } else {
+        // Not in Telegram, or on the server during SSR. User will be null.
+        console.log("Not running in Telegram or user data not found.");
+        setUser(null);
+      }
     } catch (error) {
       console.error("Auth Failed:", error);
+      setUser(null); // Ensure user is null on error
     } finally {
       setIsLoading(false);
     }
   };
-
-
 
   useEffect(() => {
     refreshUser();

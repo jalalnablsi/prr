@@ -1,69 +1,543 @@
 {
   "placeholderImages": [
     {
-      "id": "avatar1",
-      "description": "User avatar 1",
-      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-apple",
+      "description": "تفاحة",
+      "imageUrl": "https://images.unsplash.com/photo-1574934866281-7b7d2a8f4c2e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcHBsZXxlbnwwfHx8fDE3NzA2Mzc0MTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar2",
-      "description": "User avatar 2",
-      "imageUrl": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-banana",
+      "description": "موز",
+      "imageUrl": "https://images.unsplash.com/photo-1587132137056-bfbf0166836e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxiYW5hbmF8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar3",
-      "description": "User avatar 3",
-      "imageUrl": "https://images.unsplash.com/photo-1675355291178-2d129f22c740?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cGVyc29uJTIwZmFjZXxlbnwwfHx8fDE3NzA1MzIyNzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-orange",
+      "description": "برتقالة",
+      "imageUrl": "https://images.unsplash.com/photo-1557800259-2d2b1d5f8b5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxvcmFuZ2V8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar4",
-      "description": "User avatar 4",
-      "imageUrl": "https://images.unsplash.com/photo-1626526804650-7118ac691b7a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-grape",
+      "description": "عنب",
+      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7118ac691b7a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxncmFwZXxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar5",
-      "description": "User avatar 5",
-      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-watermelon",
+      "description": "بطيخ",
+      "imageUrl": "https://images.unsplash.com/photo-1597150660927-5355a43d1981?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3YXRlcm1lbG9ufGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar6",
-      "description": "User avatar 6",
-      "imageUrl": "https://images.unsplash.com/photo-1599566147214-ce487862ea4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-carrot",
+      "description": "جزر",
+      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7b7d2a8f4c2e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjYXJyb3R8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "avatar7",
-      "description": "User avatar 7",
-      "imageUrl": "https://images.unsplash.com/photo-1521146764736-56c929d59c83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJzb24lMjBmYWNlfGVufDB8fHx8MTc3MDUzMjI3NHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person face"
+      "id": "stranger-tomato",
+      "description": "طماطم",
+      "imageUrl": "https://images.unsplash.com/photo-1587132137056-bfbf0166836e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx0b21hdG98ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
     },
     {
-      "id": "stranger-car",
-      "description": "سيارة",
-      "imageUrl": "https://images.unsplash.com/photo-1597150660927-5355a43d1981?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzdHJhbmdlcl9nYW1lfGVufDB8fHx8MTc3MDYzNzQxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "id": "stranger-potato",
+      "description": "بطاطس",
+      "imageUrl": "https://images.unsplash.com/photo-1557800259-2d2b1d5f8b5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxwb3RhdG98ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-onion",
+      "description": "بصل",
+      "imageUrl": "https://images.unsplash.com/photo-1602143407151-7118ac691b7a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxvbmlvbnxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-cucumber",
+      "description": "خيار",
+      "imageUrl": "https://images.unsplash.com/photo-1597150660927-5355a43d1981?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8Y3VjdW1iZXJ8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-dog",
+      "description": "كلب",
+      "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMXx8ZG9nfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stranger_game"
     },
     {
       "id": "stranger-cat",
       "description": "قطة",
-      "imageUrl": "https://images.unsplash.com/photo-1755771653447-f20c148c6b34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxzdHJhbmdlcl9nYW1lfGVufDB8fHx8MTc3MDYzNzQxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMnx8Y2F0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-horse",
+      "description": "حصان",
+      "imageUrl": "https://images.unsplash.com/photo-1553284965-83fd3e82d6cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxM3x8aG9yc2V8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-cow",
+      "description": "بقرة",
+      "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNHx8Y293fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-bird",
+      "description": "عصفور",
+      "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8YmlyZHxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-fish",
+      "description": "سمكة",
+      "imageUrl": "https://images.unsplash.com/photo-1553284965-83fd3e82d6cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNnx8ZmlzaHxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-elephant",
+      "description": "فيل",
+      "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxN3x8ZWxlcGhhbnR8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-lion",
+      "description": "أسد",
+      "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxOHx8bGlvbnxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-tiger",
+      "description": "نمر",
+      "imageUrl": "https://images.unsplash.com/photo-1553284965-83fd3e82d6cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxOXx8dGlnZXJ8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-rabbit",
+      "description": "أرنب",
+      "imageUrl": "https://images.unsplash.com/photo-1543466835-00a7907e9de1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMHx8cmFiYml0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stranger_game"
     },
     {
       "id": "stranger-laptop",
       "description": "حاسوب محمول",
-      "imageUrl": "https://images.unsplash.com/photo-1576258405325-6ae2a1e8dbcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdHJhbmdlcl9nYW1lfGVufDB8fHx8MTc3MDYzNzQxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMXx8bGFwdG9wfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stranger_game"
     },
     {
-      "id": "stranger-tree",
-      "description": "شجرة",
-      "imageUrl": "https://images.unsplash.com/photo-1576258405325-6ae2a1e8dbcd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzdHJhbmdlcl9nYW1lfGVufDB8fHx8MTc3MDYzNzQxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "id": "stranger-phone",
+      "description": "هاتف ذكي",
+      "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyMnx8cGhvbmV8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-tablet",
+      "description": "جهاز لوحي",
+      "imageUrl": "https://images.unsplash.com/photo-1535474856343-d7a5a8f3c3e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyM3x8dGFibGV0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-headphones",
+      "description": "سماعات رأس",
+      "imageUrl": "https://images.unsplash.com/photo-1505308392652-9d3a8d3d8e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyNHx8aGVhZHBob25lc3xlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-camera",
+      "description": "كاميرا",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyNXx8Y2FtZXJhfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-watch",
+      "description": "ساعة يد",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyNnx8d2F0Y2h8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-keyboard",
+      "description": "لوحة مفاتيح",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyN3x8a2V5Ym9hcmR8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-mouse",
+      "description": "فأرة حاسوب",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyOHx8bW91c2V8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-printer",
+      "description": "طابعة",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyOXx8cHJpbnRlcnxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-router",
+      "description": "راوتر",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzMHx8cm91dGVyfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-car",
+      "description": "سيارة",
+      "imageUrl": "https://images.unsplash.com/photo-1597150660927-5355a43d1981?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzMXx8Y2FyfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-bike",
+      "description": "دراجة هوائية",
+      "imageUrl": "https://images.unsplash.com/photo-1485965120184-e802d54d5e22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzMnx8YmlrZXxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-bus",
+      "description": "حافلة",
+      "imageUrl": "https://images.unsplash.com/photo-1565372888705-6d2c9c7d3a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzM3x8YnVzfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-train",
+      "description": "قطار",
+      "imageUrl": "https://images.unsplash.com/photo-1542549813477-5a9496693d3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzNHx8dHJhaW58ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-airplane",
+      "description": "طائرة",
+      "imageUrl": "https://images.unsplash.com/photo-1595970322131-7d5dc5bd3b6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzNXx8YWlycGxhbmV8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-ship",
+      "description": "سفينة",
+      "imageUrl": "https://images.unsplash.com/photo-1566275932474-0d3b4e0b5e9f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzNnx8c2hpcHxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-motorcycle",
+      "description": "دراجة نارية",
+      "imageUrl": "https://images.unsplash.com/photo-1558981403-c58be39bf0a2?crop= entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzN3x8bW90b3JjeWNsZXxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-ambulance",
+      "description": "إسعاف",
+      "imageUrl": "https://images.unsplash.com/photo-1565372888705-6d2c9c7d3a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzOHx8YW1idWxhbmNlfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-firetruck",
+      "description": "شاحنة إطفاء",
+      "imageUrl": "https://images.unsplash.com/photo-1542549813477-5a9496693d3f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzOXx8ZmlyZXRydWNrfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-taxi",
+      "description": "تاكسي",
+      "imageUrl": "https://images.unsplash.com/photo-1595970322131-7d5dc5bd3b6d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0MHx8dGF4aXxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-hospital",
+      "description": "مستشفى",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0MXx8aG9zcGl0YWx8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-school",
+      "description": "مدرسة",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0Mnx8c2Nob29sfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-mosque",
+      "description": "مسجد",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0M3x8bW9zcXVlfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-church",
+      "description": "كنيسة",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0NHx8Y2h1cmNofGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-library",
+      "description": "مكتبة",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0NXx8bGlicmFyeXxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-park",
+      "description": "حديقة عامة",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0Nnx8cGFya3xlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-beach",
+      "description": "شاطئ",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0N3x8YmVhY2h8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-mountain",
+      "description": "جبل",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0OHx8bW91bnRhaW58ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-forest",
+      "description": "غابة",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0OXx8Zm9yZXN0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-desert",
+      "description": "صحراء",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1MHx8ZGVzZXJ0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-doctor",
+      "description": "طبيب",
+      "imageUrl": "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1MXx8ZG9jdG9yfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-teacher",
+      "description": "معلم",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1Mnx8dGVhY2hlcnxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-engineer",
+      "description": "مهندس",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1M3x8ZW5naW5lZXJ8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-police",
+      "description": "شرطي",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1NHx8cG9saWNlfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-firefighter",
+      "description": "رجل إطفاء",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1NXx8ZmlyZWZpZ2h0ZXJ8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-chef",
+      "description": "طباخ",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1Nnx8Y2hlZnxlb nwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-farmer",
+      "description": "مزارع",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1N3x8ZmFybWVyfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-artist",
+      "description": "فنان",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1OHx8YXJ0aXN0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-scientist",
+      "description": "عالم",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1OXx8c2NpZW50aXN0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-pilot",
+      "description": "طيار",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2MHx8cGlsb3R8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-bed",
+      "description": "سرير",
+      "imageUrl": "https://images.unsplash.com/photo-1505308392652-9d3a8d3d8e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2MXx8YmVkfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-chair",
+      "description": "كرسي",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2Mnx8Y2hhaXJ8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-table",
+      "description": "طاولة",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2M3x8dGFibGV8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-fridge",
+      "description": "ثلاجة",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2NHx8ZnJpZGdlfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-oven",
+      "description": "فرن",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2NXx8b3ZlbnxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-washing-machine",
+      "description": "غسالة",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2Nnx8d2FzaGluZy1tYWNoaW5lfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-mirror",
+      "description": "مرآة",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2N3x8bWlycm9yfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-lamp",
+      "description": "مصباح",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2OHx8bGFtcHxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-clock",
+      "description": "ساعة حائط",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2OXx8Y2xvY2t8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-door",
+      "description": "باب",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3MHx8ZG9vcnxlb nwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-football",
+      "description": "كرة قدم",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3MXx8Zm9vdGJhbGx8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-basketball",
+      "description": "كرة سلة",
+      "imageUrl": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3Mnx8YmFza2V0YmFsbHxlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-guitar",
+      "description": "غيتار",
+      "imageUrl": "https://images.unsplash.com/photo-1562345738-2f5e8d4e5e5e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3M3x8Z3VpdGFyfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-piano",
+      "description": "بيانو",
+      "imageUrl": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3NHx8cGlhbm98ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-book",
+      "description": "كتاب",
+      "imageUrl": "https://images.unsplash.com/photo-1495640383332-3c5e5a4e8d2a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3NXx8Ym9va3xlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-pen",
+      "description": "قلم",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3Nnx8cGVufGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-notebook",
+      "description": "دفتر ملاحظات",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3N3x8bm90ZWJvb2t8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-backpack",
+      "description": "حقيبة ظهر",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3OHx8YmFja3BhY2t8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-umbrella",
+      "description": "مظلة",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3OXx8dW1icmVsbGF8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-sunglasses",
+      "description": "نظارات شمسية",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4MHx8c3VuZ2xhc3Nlc3xlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-money",
+      "description": "نقود",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4MXx8bW9uZXl8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-wallet",
+      "description": "محفظة",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4Mnx8d2FsbGV0fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-key",
+      "description": "مفتاح",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4M3x8a2V5fGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-scissors",
+      "description": "مقص",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4NHx8c2Npc3NvcnN8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-bottle",
+      "description": "قارورة ماء",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4NXx8Ym90dGxlfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-cup",
+      "description": "كوب",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4Nnx8Y3VwfGVufDB8fHx8MTc3MDYzNzQxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-plate",
+      "description": "صحن",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4N3x8cGxhdGV8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-fork",
+      "description": "شوكة",
+      "imageUrl": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4OHx8Zm9ya3xlbnwwfHx8fDE3NzA2Mzc0MTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-knife",
+      "description": "سكين",
+      "imageUrl": "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4OXx8a25pZmV8ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "stranger_game"
+    },
+    {
+      "id": "stranger-spoon",
+      "description": "ملعقة",
+      "imageUrl": "https://images.unsplash.com/photo-1516035069371-29a1e9f3b45c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1MHx8c3Bvb258ZW58MHx8fHwxNzcwNjM3NDExfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "stranger_game"
     }
   ]

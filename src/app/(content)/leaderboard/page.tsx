@@ -8,7 +8,6 @@ import { Crown, Trophy, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabaseClient';
 import { useToast } from '@/hooks/use-toast';
-import WebApp from '@twa-dev/sdk';
 
 // تعريف واجهة المستخدم ليتوافق مع البيانات
 interface LeaderboardUser {
