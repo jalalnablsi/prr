@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import type { Poll } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -199,24 +199,36 @@ export default function QuizzesPage() {
   const [quizState, setQuizState] = useState<'not_started' | 'in_progress' | 'finished'>('not_started');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<{ questionId: string; isCorrect: boolean }[]>([]);
+  const adShownRef = useRef(false);
 
   // Ad effect for results screen
   useEffect(() => {
-      let adShown = false;
-      if (quizState === 'finished') {
-          // Check if BannerAd API is available
-          if (WebApp.isVersionAtLeast('6.9')) {
-              WebApp.showBannerAd().then(isShown => {
-                  adShown = isShown;
-              }).catch(e => console.error("Banner Ad Error:", e));
-          }
-      }
-      return () => {
-          // Hide banner when component unmounts or state changes
-          if (adShown) {
-              WebApp.hideBannerAd().catch(e => console.error("Hide Banner Ad Error:", e));
-          }
-      }
+    if (quizState === 'finished') {
+        try {
+            if (WebApp && WebApp.isVersionAtLeast && WebApp.isVersionAtLeast('6.9')) {
+                WebApp.showBannerAd().then(isShown => {
+                    if (isShown) {
+                        adShownRef.current = true;
+                    }
+                }).catch(e => console.error("Banner Ad Error:", e));
+            }
+        } catch (e) {
+            console.error("showBannerAd sync error:", e);
+        }
+    }
+    
+    return () => {
+        if (adShownRef.current) {
+            try {
+                if (WebApp && WebApp.hideBannerAd) {
+                    WebApp.hideBannerAd().catch(e => console.error("Hide Banner Ad Error:", e));
+                }
+            } catch (e) {
+                console.error("hideBannerAd sync error:", e);
+            }
+            adShownRef.current = false;
+        }
+    }
   }, [quizState]);
 
 
