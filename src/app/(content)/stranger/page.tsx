@@ -7,7 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { Badge } from '@/components/ui/badge';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import Image from 'next/image';
-import { Eye, EyeOff, Users, RefreshCw, Fingerprint, Sparkles, Shield, AlertCircle, Trophy } from 'lucide-react';
+import { Eye, EyeOff, Users, RefreshCw, Fingerprint, Sparkles, Shield, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 
@@ -93,6 +93,11 @@ class TopicManager {
 
 type GameState = 'setup' | 'reveal' | 'discuss' | 'end';
 
+interface FinalResults {
+  stranger: number | null;
+  topic: { imageUrl: string; description: string } | null;
+}
+
 interface UseStrangerGameReturn {
   gameState: GameState;
   numPlayers: number;
@@ -100,6 +105,7 @@ interface UseStrangerGameReturn {
   isRoleVisible: boolean;
   topic: { imageUrl: string; description: string } | null;
   stranger: number | null;
+  finalResults: FinalResults;
   setNumPlayers: (value: number) => void;
   startGame: () => void;
   revealRole: () => void;
@@ -118,6 +124,12 @@ const useStrangerGame = (): UseStrangerGameReturn => {
   const [isRoleVisible, setIsRoleVisible] = useState(false);
   const [topic, setTopic] = useState<UseStrangerGameReturn['topic']>(null);
   const [stranger, setStranger] = useState<number | null>(null);
+  
+  // ✅ حالة جديدة: لحفظ النتائج النهائية للعرض فقط
+  const [finalResults, setFinalResults] = useState<FinalResults>({ 
+    stranger: null, 
+    topic: null 
+  });
   
   const topicManagerRef = useRef<TopicManager>(new TopicManager());
 
@@ -161,11 +173,15 @@ const useStrangerGame = (): UseStrangerGameReturn => {
         setCurrentPlayer(prev => prev + 1);
       }, GAME_CONFIG.TRANSITION_DELAY);
     } else {
+      // ✅ حفظ النتائج النهائية قبل مسح البيانات الحساسة
+      setFinalResults({ stranger, topic });
+      
+      // مسح البيانات الحساسة لمنع الغش أثناء مرحلة النقاش
       setStranger(null);
       setTopic(null);
       setGameState('discuss');
     }
-  }, [currentPlayer, numPlayers]);
+  }, [currentPlayer, numPlayers, stranger, topic]);
 
   const startDiscussion = useCallback(() => {
     setGameState('discuss');
@@ -181,6 +197,7 @@ const useStrangerGame = (): UseStrangerGameReturn => {
     setCurrentPlayer(1);
     setStranger(null);
     setTopic(null);
+    setFinalResults({ stranger: null, topic: null }); // ✅ مسح النتائج القديمة
     setIsRoleVisible(false);
     topicManagerRef.current.reset();
   }, []);
@@ -200,6 +217,7 @@ const useStrangerGame = (): UseStrangerGameReturn => {
     isRoleVisible,
     topic,
     stranger,
+    finalResults, // ✅ إضافة النتائج النهائية للإرجاع
     setNumPlayers,
     startGame,
     revealRole,
@@ -427,6 +445,7 @@ export default function StrangerGamePage() {
     isRoleVisible,
     topic,
     stranger,
+    finalResults, // ✅ استخراج النتائج النهائية
     setNumPlayers,
     startGame,
     revealRole,
@@ -607,7 +626,7 @@ export default function StrangerGamePage() {
   }
 
   // ─────────────────────────────────────────
-  // 🏁 شاشة: النتائج
+  // 🏁 شاشة: النتائج (✅ المعدلة لعرض finalResults)
   // ─────────────────────────────────────────
   if (gameState === 'end') {
     return (
@@ -623,24 +642,26 @@ export default function StrangerGamePage() {
           </CardHeader>
           
           <CardContent className="space-y-6">
-            {/* نتيجة الغريب */}
+            {/* نتيجة الغريب - ✅ تستخدم finalResults */}
             <div className="p-6 rounded-2xl border-2 border-dashed space-y-4 bg-card/80 animate-in fade-in-50 slide-in-from-bottom-4 duration-300 delay-300">
               <p className="text-muted-foreground font-medium">الغريب كان:</p>
               <p className="text-4xl font-bold text-primary font-headline animate-in zoom-in-50 duration-300 delay-400">
-                اللاعب رقم {stranger} 🎭
+                {/* ✅ العرض من finalResults بدلاً من stranger */}
+                اللاعب رقم {finalResults.stranger} 🎭
               </p>
               
               <div className="pt-4 border-t border-border/60 space-y-3">
                 <p className="text-muted-foreground font-medium">الموضوع السري كان:</p>
                 <p className="text-2xl font-bold font-headline animate-in fade-in-50 duration-300 delay-500">
-                  {topic?.description}
+                  {/* ✅ العرض من finalResults بدلاً من topic */}
+                  {finalResults.topic?.description}
                 </p>
                 
-                {topic?.imageUrl && (
+                {finalResults.topic?.imageUrl && (
                   <div className="relative w-full aspect-video rounded-xl overflow-hidden border-2 animate-in fade-in-50 duration-300 delay-600">
                     <Image 
-                      src={topic.imageUrl} 
-                      alt={topic.description} 
+                      src={finalResults.topic.imageUrl} 
+                      alt={finalResults.topic.description} 
                       fill 
                       className="object-cover"
                       onError={(e) => {
@@ -678,3 +699,28 @@ export default function StrangerGamePage() {
 
   return null;
 }
+
+// ─────────────────────────────────────────────────────────────
+// 🏆 مكون Trophy محلي (لتجنب مشكلة الاستيراد)
+// ─────────────────────────────────────────────────────────────
+const Trophy = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </svg>
+);
